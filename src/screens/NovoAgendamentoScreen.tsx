@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   Alert,
   Image,
@@ -114,14 +113,15 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
       />
 
       <View style={styles.formWrapper}>
-        {/* PASSO 1: Seleção de Serviço */}
+        {/* PASSO 1: Seleção de Serviço - Grid Uniforme e Moderno */}
         <Text style={styles.sectionTitle}>1. SELECIONE O SERVIÇO</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
+        <View style={styles.servicosGrid}>
           {servicos.map((s) => {
             const isSelected = selectedServicoId === s.id;
             return (
               <TouchableOpacity
                 key={s.id}
+                style={styles.servicoCardWrapper}
                 onPress={() => setSelectedServicoId(s.id)}
                 activeOpacity={0.8}
                 accessibilityRole="button"
@@ -129,18 +129,26 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
               >
                 <Card style={[styles.servicoCard, isSelected && styles.selectedCard]}>
                   <Card.Content style={styles.cardContent}>
-                    <Text style={styles.servicoNome}>{s.nome}</Text>
-                    <Text style={styles.servicoDesc}>{s.descricao}</Text>
+                    <View style={styles.cardTop}>
+                      <Text style={styles.servicoNome} numberOfLines={2}>
+                        {s.nome}
+                      </Text>
+                      <Text style={styles.servicoDesc} numberOfLines={2}>
+                        {s.descricao}
+                      </Text>
+                    </View>
                     <View style={styles.servicoFooter}>
                       <Text style={styles.servicoPreco}>{formatCurrency(s.preco)}</Text>
-                      <Text style={styles.servicoDuracao}>{s.duracaoMinutos} min</Text>
+                      <View style={styles.duracaoChip}>
+                        <Text style={styles.duracaoText}>{s.duracaoMinutos} min</Text>
+                      </View>
                     </View>
                   </Card.Content>
                 </Card>
               </TouchableOpacity>
             );
           })}
-        </ScrollView>
+        </View>
 
         {/* PASSO 2: Seleção de Profissional */}
         <Text style={styles.sectionTitle}>2. SELECIONE O PROFISSIONAL</Text>
@@ -286,17 +294,24 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: COLORS.primary,
     letterSpacing: 1,
-    marginTop: 16,
-    marginBottom: 8,
+    marginTop: 20,
+    marginBottom: 10,
   },
-  horizontalScroll: {
-    marginBottom: 12,
+  servicosGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 14,
+    marginBottom: 8,
+    width: '100%',
+  },
+  servicoCardWrapper: {
+    flex: 1,
+    minWidth: 220,
   },
   servicoCard: {
-    width: 260,
+    height: 175,
     backgroundColor: COLORS.cardBackground,
-    marginRight: 12,
-    borderRadius: 12,
+    borderRadius: 14,
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
   },
@@ -306,53 +321,70 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.cardBackground,
   },
   cardContent: {
-    padding: 14,
+    padding: 16,
+    height: '100%',
+    justifyContent: 'space-between',
+  },
+  cardTop: {
+    flex: 1,
   },
   servicoNome: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '700',
     color: COLORS.textPrimary,
+    lineHeight: 20,
   },
   servicoDesc: {
-    fontSize: 11,
+    fontSize: 12,
     color: COLORS.textSecondary,
-    marginTop: 4,
-    height: 36,
+    marginTop: 6,
+    lineHeight: 18,
+    letterSpacing: 0.2,
   },
   servicoFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 8,
     alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: COLORS.cardBorder + '80',
+    paddingTop: 10,
+    marginTop: 8,
   },
   servicoPreco: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '800',
     color: COLORS.primary,
   },
-  servicoDuracao: {
+  duracaoChip: {
+    backgroundColor: COLORS.cardBorder,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  duracaoText: {
     fontSize: 11,
     color: COLORS.textSecondary,
+    fontWeight: '600',
   },
   profissionaisGrid: {
     flexDirection: 'row',
-    gap: 12,
-    marginBottom: 12,
+    gap: 14,
+    marginBottom: 8,
     width: '100%',
   },
   profCard: {
     flex: 1,
     backgroundColor: COLORS.cardBackground,
-    padding: 14,
-    borderRadius: 12,
+    padding: 16,
+    borderRadius: 14,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
   },
   avatar: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     marginBottom: 8,
   },
   avatarPlaceholder: {
@@ -362,7 +394,7 @@ const styles = StyleSheet.create({
   },
   avatarLetter: {
     color: COLORS.primary,
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '700',
   },
   profNome: {
