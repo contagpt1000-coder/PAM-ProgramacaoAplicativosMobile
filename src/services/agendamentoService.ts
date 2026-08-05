@@ -37,10 +37,10 @@ export const agendamentoService = {
       this.getProfissionais(),
     ]);
 
-    const servicosMap = new Map(servicos.map((s) => [s.id, s]));
-    const profissionaisMap = new Map(profissionais.map((p) => [p.id, p]));
+    const servicosMap = new Map<string, Servico>(servicos.map((s) => [s.id, s]));
+    const profissionaisMap = new Map<string, Profissional>(profissionais.map((p) => [p.id, p]));
 
-    return agendamentosRes.data.map((ag) => ({
+    return agendamentosRes.data.map((ag): AgendamentoComDetalhes => ({
       ...ag,
       servico: servicosMap.get(ag.servicoId),
       profissional: profissionaisMap.get(ag.profissionalId),

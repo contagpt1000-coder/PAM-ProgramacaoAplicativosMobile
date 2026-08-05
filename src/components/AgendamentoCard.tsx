@@ -38,7 +38,7 @@ export const AgendamentoCard: React.FC<AgendamentoCardProps> = ({
       case 'cancelado':
         return 'CANCELADO';
       default:
-        return status.toUpperCase();
+        return String(status).toUpperCase();
     }
   };
 

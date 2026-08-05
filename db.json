@@ -55,28 +55,6 @@
   ],
   "agendamentos": [
     {
-      "id": "101",
-      "clienteNome": "Gabriel Souza",
-      "clienteTelefone": "(85) 99876-5432",
-      "servicoId": "3",
-      "profissionalId": "1",
-      "data": "2026-08-10",
-      "hora": "14:30",
-      "status": "concluido",
-      "observacoes": "Cliente prefere pomada efeito opaco/matte."
-    },
-    {
-      "id": "102",
-      "clienteNome": "Matheus Lima",
-      "clienteTelefone": "(85) 98765-4321",
-      "servicoId": "1",
-      "profissionalId": "2",
-      "data": "2026-08-04",
-      "hora": "10:00",
-      "status": "concluido",
-      "observacoes": "Atendimento realizado sem intercorrências."
-    },
-    {
       "id": "103",
       "clienteNome": "Felipe Rocha",
       "clienteTelefone": "(85) 99123-4567",
