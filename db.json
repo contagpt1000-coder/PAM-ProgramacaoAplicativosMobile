@@ -1,0 +1,91 @@
+{
+  "servicos": [
+    {
+      "id": "1",
+      "nome": "Corte de Cabelo Premium",
+      "descricao": "Corte moderno com tesoura e máquina, finalização com pomada importada e lavagem.",
+      "preco": 55.0,
+      "duracaoMinutos": 45,
+      "imagemUrl": "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400"
+    },
+    {
+      "id": "2",
+      "nome": "Barba Completa com Toalha Quente",
+      "descricao": "Modelagem de barba, esfoliação facial, alinhamento com navalha e hidratação com óleos essenciais.",
+      "preco": 45.0,
+      "duracaoMinutos": 35,
+      "imagemUrl": "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400"
+    },
+    {
+      "id": "3",
+      "nome": "Combo Barba & Cabelo",
+      "descricao": "Experiência completa: Corte estilizado + barba completa com tratamento de toalha quente.",
+      "preco": 90.0,
+      "duracaoMinutos": 75,
+      "imagemUrl": "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400"
+    },
+    {
+      "id": "4",
+      "nome": "Pigmentação de Barba",
+      "descricao": "Preenchimento de falhas e alinhamento de contorno da barba com tinta hipoalergênica.",
+      "preco": 35.0,
+      "duracaoMinutos": 30,
+      "imagemUrl": "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=400"
+    }
+  ],
+  "profissionais": [
+    {
+      "id": "1",
+      "nome": "Carlos Silva (Mestre Barbeiro)",
+      "especialidade": "Cortes Clássicos e Fade",
+      "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200"
+    },
+    {
+      "id": "2",
+      "nome": "Rafael Oliveira",
+      "especialidade": "Barboterapia e Visagismo",
+      "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200"
+    },
+    {
+      "id": "3",
+      "nome": "Lucas Mendes",
+      "especialidade": "Colorimetria e Químicas",
+      "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200"
+    }
+  ],
+  "agendamentos": [
+    {
+      "id": "101",
+      "clienteNome": "Gabriel Souza",
+      "clienteTelefone": "(85) 99876-5432",
+      "servicoId": "3",
+      "profissionalId": "1",
+      "data": "2026-08-10",
+      "hora": "14:30",
+      "status": "agendado",
+      "observacoes": "Cliente prefere pomada efeito opaco/matte."
+    },
+    {
+      "id": "102",
+      "clienteNome": "Matheus Lima",
+      "clienteTelefone": "(85) 98765-4321",
+      "servicoId": "1",
+      "profissionalId": "2",
+      "data": "2026-08-04",
+      "hora": "10:00",
+      "status": "concluido",
+      "observacoes": "Atendimento realizado sem intercorrências."
+    },
+    {
+      "id": "103",
+      "clienteNome": "Felipe Rocha",
+      "clienteTelefone": "(85) 99123-4567",
+      "servicoId": "2",
+      "profissionalId": "3",
+      "data": "2026-08-05",
+      "hora": "16:00",
+      "status": "cancelado",
+      "observacoes": "Cliente solicitou cancelamento por imprevisto de trabalho."
+    }
+  ]
+}
