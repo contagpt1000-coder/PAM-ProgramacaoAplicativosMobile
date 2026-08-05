@@ -29,23 +29,23 @@ export default function App() {
       }
       style.innerHTML = `
         html, body, #root {
-          height: 100% !important;
+          min-height: 100% !important;
           width: 100% !important;
-          overflow: hidden !important;
+          overflow-y: auto !important;
+          overflow-x: hidden !important;
           margin: 0 !important;
           padding: 0 !important;
           background-color: ${COLORS.background} !important;
         }
         ::-webkit-scrollbar {
-          width: 8px;
-          height: 8px;
+          width: 10px;
         }
         ::-webkit-scrollbar-track {
           background: #121215;
         }
         ::-webkit-scrollbar-thumb {
           background: #d97706;
-          border-radius: 4px;
+          border-radius: 5px;
         }
         ::-webkit-scrollbar-thumb:hover {
           background: #fbbf24;
