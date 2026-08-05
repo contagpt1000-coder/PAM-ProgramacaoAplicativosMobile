@@ -28,27 +28,31 @@ export default function App() {
         document.head.appendChild(style);
       }
       style.innerHTML = `
-        html, body, #root {
-          min-height: 100% !important;
-          width: 100% !important;
+        html, body, #root, #root > div, [data-reactroot] {
+          min-height: 100vh !important;
+          height: auto !important;
           overflow-y: auto !important;
           overflow-x: hidden !important;
           margin: 0 !important;
           padding: 0 !important;
           background-color: ${COLORS.background} !important;
         }
+        
+        /* Custom Gold Scrollbar */
         ::-webkit-scrollbar {
-          width: 10px;
+          width: 12px !important;
+          display: block !important;
         }
         ::-webkit-scrollbar-track {
-          background: #121215;
+          background: #121215 !important;
         }
         ::-webkit-scrollbar-thumb {
-          background: #d97706;
-          border-radius: 5px;
+          background: #d97706 !important;
+          border-radius: 6px !important;
+          border: 2px solid #121215 !important;
         }
         ::-webkit-scrollbar-thumb:hover {
-          background: #fbbf24;
+          background: #fbbf24 !important;
         }
       `;
     }

@@ -7,6 +7,7 @@ import {
   RefreshControl,
   TouchableOpacity,
   Alert,
+  Platform,
 } from 'react-native';
 import { FAB, Searchbar } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
@@ -190,12 +191,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    minHeight: '100%',
     width: '100%',
     backgroundColor: COLORS.background,
   },
   contentWrapper: {
-    flex: 1,
+    minHeight: '100%',
     width: '100%',
     maxWidth: 1000,
     alignSelf: 'center',
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: 20,
-    paddingBottom: 100,
+    paddingBottom: 120,
   },
   emptyState: {
     padding: 32,
@@ -281,11 +282,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   fab: {
-    position: 'absolute',
+    position: Platform.OS === 'web' ? ('fixed' as any) : 'absolute',
     margin: 20,
-    right: 20,
-    bottom: 20,
+    right: 28,
+    bottom: 28,
     backgroundColor: COLORS.primary,
     borderRadius: 28,
+    zIndex: 9999,
   },
 });
