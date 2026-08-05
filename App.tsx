@@ -28,19 +28,27 @@ export default function App() {
         document.head.appendChild(style);
       }
       style.innerHTML = `
-        html, body, #root, #root > div {
-          min-height: 100vh !important;
-          width: 100% !important;
-          overflow-y: auto !important;
+        html {
+          overflow-y: scroll !important;
           overflow-x: hidden !important;
+          height: 100% !important;
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          background-color: ${COLORS.background} !important;
+        }
+        body, #root, #root > div {
+          min-height: 100% !important;
+          width: 100% !important;
           margin: 0 !important;
           padding: 0 !important;
           background-color: ${COLORS.background} !important;
         }
         
-        /* Single Scrollbar at the far right edge of the browser window */
+        /* Custom Solid Gold Scrollbar - Always Active */
         ::-webkit-scrollbar {
           width: 12px !important;
+          background: #09090b !important;
         }
         ::-webkit-scrollbar-track {
           background: #09090b !important;

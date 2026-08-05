@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { COLORS } from '../constants/colors';
 
@@ -17,10 +17,11 @@ export const Header: React.FC<HeaderProps> = ({
   onBackPress,
 }) => {
   const insets = useSafeAreaInsets();
+  const paddingTop = Platform.OS === 'web' ? 16 : Math.max(insets.top + 8, 16);
 
   return (
     <View
-      style={[styles.container, { paddingTop: Math.max(insets.top + 8, 16) }]}
+      style={[styles.container, { paddingTop }]}
       accessibilityRole="header"
     >
       {showBackButton && onBackPress ? (
