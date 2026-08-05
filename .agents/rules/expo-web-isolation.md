@@ -1,5 +1,12 @@
-# Expo Web & JSON-Server Static Asset Isolation Rule
+# Expo Web Layout & Scroll Isolation Rules
 
-- **NUNCA** crie um arquivo `index.html` dentro da pasta `./public` de um projeto Expo/React Native quando houver um servidor `json-server` ou similar coexistindo na mesma raiz.
-- **Motivo:** O Expo CLI (SDK 50+) utiliza a pasta `./public/index.html` como modelo de template Web principal da aplicação móvel. Criar um HTML customizado para o `json-server` ali substitui o template do aplicativo, fazendo a porta do Expo (8081) servir o HTML da API em vez da aplicação React Native.
-- **Solução Padronizada:** Para personalizar ou estilizar a página do `json-server`, crie um script customizado `server.js` via Node.js (utilizando o pacote `json-server` como middleware do Express) que sirva o HTML desejado diretamente na rota raiz (`GET /`) da porta 3000, mantendo o diretório de pastas do Expo intacto e limpo.
+1. **Asset & HTML Template Isolation**:
+   - **NUNCA** crie arquivos `index.html` dentro da pasta `./public` em projetos Expo SDK 50+ para evitar sobrescrever a injeção do `AppEntry.js`.
+   - Sempre utilize um script dedicado `server.js` (Node Express Middleware) para servir dashboards customizados do `json-server` na porta 3000.
+
+2. **Container de Rolagem Único (Single Scroll Container)**:
+   - **NUNCA** aplique `overflow-y: auto !important` no `html, body` ou `#root` se as telas do app usarem `ScrollView` ou `FlatList`. Mantenha `html, body, #root { height: 100%; overflow: hidden; }` para evitar barras de rolagem duplas e trepidação visual (shaking/flickering).
+   - Evite botões fixos com `position: fixed` concorrendo com o fluxo normal de formulários scrolláveis.
+
+3. **Preenchimento de Largura Responsiva em Desktop (Full Width Layout)**:
+   - Em layouts para PC/Desktop, a aplicação deve preencher `width: 100%` da tela com preenchimento lateral fluido (`paddingHorizontal: 24`), sem impor contêineres estreitos centralizados (`maxWidth: 900px`) com grandes margens pretas laterais.
