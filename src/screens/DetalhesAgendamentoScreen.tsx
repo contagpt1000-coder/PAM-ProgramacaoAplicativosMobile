@@ -96,10 +96,6 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
       await agendamentoService.deleteAgendamento(id);
       setDeleteDialogVisible(false);
       setSuccessDeleteModalVisible(true);
-      setTimeout(() => {
-        setSuccessDeleteModalVisible(false);
-        navigation.navigate('Home');
-      }, 1500);
     } catch (error) {
       Alert.alert('Erro HTTP', 'Não foi possível excluir o agendamento.');
     } finally {
@@ -109,7 +105,7 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
 
   const handleFinishDeleteSuccess = () => {
     setSuccessDeleteModalVisible(false);
-    navigation.navigate('Home');
+    navigation.goBack();
   };
 
   if (loading || !agendamento) {
@@ -129,173 +125,171 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
 
   return (
     <View style={styles.container}>
-      <View style={styles.responsiveContent}>
-        <Header
-          title="DETALHES"
-          subtitle={`Código: #${agendamento.id}`}
-          showBackButton={true}
-          onBackPress={() => navigation.goBack()}
-        />
+      <Header
+        title="DETALHES"
+        subtitle={`Código: #${agendamento.id}`}
+        showBackButton={true}
+        onBackPress={() => navigation.goBack()}
+      />
 
-        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={true}>
-          {/* Card Principal de Resumo */}
-          <Card style={styles.mainCard}>
-            <Card.Content>
-              <View style={styles.headerRow}>
-                <View>
-                  <Text style={styles.clientLabel}>CLIENTE</Text>
-                  <Text style={styles.clientName}>{agendamento.clienteNome}</Text>
-                  <Text style={styles.clientPhone}>{agendamento.clienteTelefone}</Text>
-                </View>
-                <Chip
-                  style={[
-                    styles.statusChip,
-                    { backgroundColor: getStatusColor(agendamento.status) + '20' },
-                  ]}
-                  textStyle={{
-                    color: getStatusColor(agendamento.status),
-                    fontWeight: '800',
-                    fontSize: 11,
-                  }}
-                >
-                  {agendamento.status.toUpperCase()}
-                </Chip>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={true}>
+        {/* Card Principal de Resumo */}
+        <Card style={styles.mainCard}>
+          <Card.Content>
+            <View style={styles.headerRow}>
+              <View>
+                <Text style={styles.clientLabel}>CLIENTE</Text>
+                <Text style={styles.clientName}>{agendamento.clienteNome}</Text>
+                <Text style={styles.clientPhone}>{agendamento.clienteTelefone}</Text>
               </View>
-
-              <View style={styles.divider} />
-
-              {/* Detalhes do Serviço */}
-              <Text style={styles.sectionLabel}>SERVIÇO SELECIONADO</Text>
-              <Text style={styles.servicoNome}>{agendamento.servico?.nome}</Text>
-              <Text style={styles.servicoDesc}>{agendamento.servico?.descricao}</Text>
-              <Text style={styles.servicoPreco}>
-                Valor Total: {formatCurrency(agendamento.servico?.preco || 0)} ({agendamento.servico?.duracaoMinutos} min)
-              </Text>
-
-              <View style={styles.divider} />
-
-              {/* Profissional */}
-              <Text style={styles.sectionLabel}>PROFISSIONAL RESPONSÁVEL</Text>
-              <Text style={styles.profNome}>{agendamento.profissional?.nome}</Text>
-              <Text style={styles.profEspecialidade}>{agendamento.profissional?.especialidade}</Text>
-
-              <View style={styles.divider} />
-
-              {/* Data e Hora Atual ou Formulário de Edição */}
-              <Text style={styles.sectionLabel}>DATA & HORÁRIO</Text>
-              {!modoEdicao ? (
-                <View style={styles.dateTimeContainer}>
-                  <Text style={styles.dateTimeText}>
-                    {formatDateBR(agendamento.data)} às {agendamento.hora}
-                  </Text>
-                  {agendamento.status === 'agendado' && (
-                    <TouchableOpacity
-                      onPress={() => setModoEdicao(true)}
-                      accessibilityRole="button"
-                      accessibilityLabel="Alterar data e hora do agendamento"
-                    >
-                      <Text style={styles.reagendarLink}>[Reagendar Data/Hora]</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              ) : (
-                <View style={styles.editBox}>
-                  <TextInput
-                    label="Nova Data (AAAA-MM-DD)"
-                    mode="outlined"
-                    value={novaData}
-                    onChangeText={setNovaData}
-                    keyboardType="numeric"
-                    maxLength={10}
-                    style={styles.input}
-                    textColor={COLORS.textPrimary}
-                    outlineColor={COLORS.cardBorder}
-                    activeOutlineColor={COLORS.primary}
-                  />
-                  <TextInput
-                    label="Novo Horário (HH:mm)"
-                    mode="outlined"
-                    value={novaHora}
-                    onChangeText={setNovaHora}
-                    keyboardType="numeric"
-                    maxLength={5}
-                    style={styles.input}
-                    textColor={COLORS.textPrimary}
-                    outlineColor={COLORS.cardBorder}
-                    activeOutlineColor={COLORS.primary}
-                  />
-                  <View style={styles.editButtonsRow}>
-                    <Button
-                      mode="outlined"
-                      onPress={() => setModoEdicao(false)}
-                      textColor={COLORS.textSecondary}
-                      style={{ flex: 1, minHeight: 44, justifyContent: 'center' }}
-                    >
-                      CANCELAR
-                    </Button>
-                    <Button
-                      mode="contained"
-                      onPress={handleSalvarEdicao}
-                      loading={updating}
-                      buttonColor={COLORS.primary}
-                      textColor={COLORS.background}
-                      style={{ flex: 1, minHeight: 44, justifyContent: 'center' }}
-                    >
-                      SALVAR
-                    </Button>
-                  </View>
-                </View>
-              )}
-
-              {agendamento.observacoes ? (
-                <>
-                  <View style={styles.divider} />
-                  <Text style={styles.sectionLabel}>OBSERVAÇÕES</Text>
-                  <Text style={styles.obsText}>{agendamento.observacoes}</Text>
-                </>
-              ) : null}
-            </Card.Content>
-          </Card>
-
-          {/* Ações de Alteração de Status (Update) */}
-          {agendamento.status === 'agendado' && (
-            <View style={styles.actionsContainer}>
-              <Button
-                mode="contained"
-                onPress={() => handleUpdateStatus('concluido')}
-                loading={updating}
-                buttonColor={COLORS.statusConcluido}
-                textColor={COLORS.white}
-                style={styles.actionButton}
-                accessibilityLabel="Marcar como concluído"
+              <Chip
+                style={[
+                  styles.statusChip,
+                  { backgroundColor: getStatusColor(agendamento.status) + '20' },
+                ]}
+                textStyle={{
+                  color: getStatusColor(agendamento.status),
+                  fontWeight: '800',
+                  fontSize: 11,
+                }}
               >
-                MARCAR COMO CONCLUÍDO
-              </Button>
-              <Button
-                mode="outlined"
-                onPress={() => handleUpdateStatus('cancelado')}
-                loading={updating}
-                textColor={COLORS.statusCancelado}
-                style={[styles.actionButton, { borderColor: COLORS.statusCancelado }]}
-                accessibilityLabel="Cancelar agendamento"
-              >
-                CANCELAR AGENDAMENTO
-              </Button>
+                {agendamento.status.toUpperCase()}
+              </Chip>
             </View>
-          )}
 
-          {/* Exclusão do Histórico (Delete) */}
-          <Button
-            mode="text"
-            onPress={() => setDeleteDialogVisible(true)}
-            textColor={COLORS.error}
-            style={styles.deleteButton}
-            accessibilityLabel="Excluir agendamento do histórico"
-          >
-            EXCLUIR DO HISTÓRICO
-          </Button>
-        </ScrollView>
-      </View>
+            <View style={styles.divider} />
+
+            {/* Detalhes do Serviço */}
+            <Text style={styles.sectionLabel}>SERVIÇO SELECIONADO</Text>
+            <Text style={styles.servicoNome}>{agendamento.servico?.nome}</Text>
+            <Text style={styles.servicoDesc}>{agendamento.servico?.descricao}</Text>
+            <Text style={styles.servicoPreco}>
+              Valor Total: {formatCurrency(agendamento.servico?.preco || 0)} ({agendamento.servico?.duracaoMinutos} min)
+            </Text>
+
+            <View style={styles.divider} />
+
+            {/* Profissional */}
+            <Text style={styles.sectionLabel}>PROFISSIONAL RESPONSÁVEL</Text>
+            <Text style={styles.profNome}>{agendamento.profissional?.nome}</Text>
+            <Text style={styles.profEspecialidade}>{agendamento.profissional?.especialidade}</Text>
+
+            <View style={styles.divider} />
+
+            {/* Data e Hora Atual ou Formulário de Edição */}
+            <Text style={styles.sectionLabel}>DATA & HORÁRIO</Text>
+            {!modoEdicao ? (
+              <View style={styles.dateTimeContainer}>
+                <Text style={styles.dateTimeText}>
+                  {formatDateBR(agendamento.data)} às {agendamento.hora}
+                </Text>
+                {agendamento.status === 'agendado' && (
+                  <TouchableOpacity
+                    onPress={() => setModoEdicao(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel="Alterar data e hora do agendamento"
+                  >
+                    <Text style={styles.reagendarLink}>[Reagendar Data/Hora]</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            ) : (
+              <View style={styles.editBox}>
+                <TextInput
+                  label="Nova Data (AAAA-MM-DD)"
+                  mode="outlined"
+                  value={novaData}
+                  onChangeText={setNovaData}
+                  keyboardType="numeric"
+                  maxLength={10}
+                  style={styles.input}
+                  textColor={COLORS.textPrimary}
+                  outlineColor={COLORS.cardBorder}
+                  activeOutlineColor={COLORS.primary}
+                />
+                <TextInput
+                  label="Novo Horário (HH:mm)"
+                  mode="outlined"
+                  value={novaHora}
+                  onChangeText={setNovaHora}
+                  keyboardType="numeric"
+                  maxLength={5}
+                  style={styles.input}
+                  textColor={COLORS.textPrimary}
+                  outlineColor={COLORS.cardBorder}
+                  activeOutlineColor={COLORS.primary}
+                />
+                <View style={styles.editButtonsRow}>
+                  <Button
+                    mode="outlined"
+                    onPress={() => setModoEdicao(false)}
+                    textColor={COLORS.textSecondary}
+                    style={{ flex: 1, minHeight: 44, justifyContent: 'center' }}
+                  >
+                    CANCELAR
+                  </Button>
+                  <Button
+                    mode="contained"
+                    onPress={handleSalvarEdicao}
+                    loading={updating}
+                    buttonColor={COLORS.primary}
+                    textColor={COLORS.background}
+                    style={{ flex: 1, minHeight: 44, justifyContent: 'center' }}
+                  >
+                    SALVAR
+                  </Button>
+                </View>
+              </View>
+            )}
+
+            {agendamento.observacoes ? (
+              <>
+                <View style={styles.divider} />
+                <Text style={styles.sectionLabel}>OBSERVAÇÕES</Text>
+                <Text style={styles.obsText}>{agendamento.observacoes}</Text>
+              </>
+            ) : null}
+          </Card.Content>
+        </Card>
+
+        {/* Ações de Alteração de Status (Update) */}
+        {agendamento.status === 'agendado' && (
+          <View style={styles.actionsContainer}>
+            <Button
+              mode="contained"
+              onPress={() => handleUpdateStatus('concluido')}
+              loading={updating}
+              buttonColor={COLORS.statusConcluido}
+              textColor={COLORS.white}
+              style={styles.actionButton}
+              accessibilityLabel="Marcar como concluído"
+            >
+              MARCAR COMO CONCLUÍDO
+            </Button>
+            <Button
+              mode="outlined"
+              onPress={() => handleUpdateStatus('cancelado')}
+              loading={updating}
+              textColor={COLORS.statusCancelado}
+              style={[styles.actionButton, { borderColor: COLORS.statusCancelado }]}
+              accessibilityLabel="Cancelar agendamento"
+            >
+              CANCELAR AGENDAMENTO
+            </Button>
+          </View>
+        )}
+
+        {/* Exclusão do Histórico (Delete) */}
+        <Button
+          mode="text"
+          onPress={() => setDeleteDialogVisible(true)}
+          textColor={COLORS.error}
+          style={styles.deleteButton}
+          accessibilityLabel="Excluir agendamento do histórico"
+        >
+          EXCLUIR DO HISTÓRICO
+        </Button>
+      </ScrollView>
 
       {/* Modal de Confirmação de Exclusão */}
       <Portal>
@@ -322,7 +316,7 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
           </Dialog.Actions>
         </Dialog>
 
-        {/* Modal Visual de Sucesso na Exclusão com Redirecionamento Automático */}
+        {/* Modal de Sucesso na Exclusão */}
         <Dialog
           visible={successDeleteModalVisible}
           onDismiss={handleFinishDeleteSuccess}
@@ -332,11 +326,8 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
             🎉 EXCLUÍDO COM SUCESSO!
           </Dialog.Title>
           <Dialog.Content>
-            <Text style={{ color: COLORS.textPrimary, textAlign: 'center', fontSize: 14, marginBottom: 8 }}>
+            <Text style={{ color: COLORS.textPrimary, textAlign: 'center', fontSize: 14 }}>
               O agendamento #{id} foi removido com sucesso do banco de dados.
-            </Text>
-            <Text style={{ color: COLORS.textSecondary, textAlign: 'center', fontSize: 12, fontStyle: 'italic' }}>
-              Redirecionando automaticamente para a tela principal...
             </Text>
           </Dialog.Content>
           <Dialog.Actions style={{ justifyContent: 'center' }}>
@@ -345,9 +336,9 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
               onPress={handleFinishDeleteSuccess}
               buttonColor={COLORS.primary}
               textColor={COLORS.background}
-              style={{ minWidth: 160, borderRadius: 8 }}
+              style={{ minWidth: 180, borderRadius: 8 }}
             >
-              IR PARA HOME AGORA
+              VOLTAR À TELA INICIAL
             </Button>
           </Dialog.Actions>
         </Dialog>
@@ -359,23 +350,17 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  responsiveContent: {
-    flex: 1,
     width: '100%',
-    maxWidth: 900,
-    alignSelf: 'center',
+    backgroundColor: COLORS.background,
   },
   scrollView: {
     flex: 1,
     width: '100%',
-    maxWidth: 900,
-    alignSelf: 'center',
   },
   scrollContent: {
-    padding: 16,
-    paddingBottom: 140,
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 60,
   },
   mainCard: {
     backgroundColor: COLORS.cardBackground,
