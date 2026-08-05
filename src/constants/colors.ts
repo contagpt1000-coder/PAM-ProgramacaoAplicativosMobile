@@ -1,8 +1,9 @@
 export const COLORS = {
-  background: '#09090b', // Zinc 950
-  cardBackground: '#18181b', // Zinc 900
-  cardBorder: '#27272a', // Zinc 800
-  primary: '#fbbf24', // Amber 400 (Dourado)
+  background: '#0c0c0e', // Dark background
+  cardBackground: '#16161b', // Zinc Glass Card
+  cardBorder: 'rgba(251, 191, 36, 0.22)', // Subtle Gold Glass Border
+  cardBorderHover: '#fbbf24', // Full Gold Border
+  primary: '#fbbf24', // Amber 400 (Dourado Premium)
   primaryDark: '#d97706', // Amber 600
   textPrimary: '#f4f4f5', // Zinc 100
   textSecondary: '#a1a1aa', // Zinc 400
