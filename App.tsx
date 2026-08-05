@@ -28,7 +28,7 @@ export default function App() {
         document.head.appendChild(style);
       }
       style.innerHTML = `
-        /* Ensure normal native browser scrolling like port 3000 */
+        /* Native browser scrolling exactly like port 3000 */
         html, body {
           height: 100% !important;
           width: 100% !important;
@@ -39,25 +39,19 @@ export default function App() {
           background-color: ${COLORS.background} !important;
         }
 
-        #root, #root > div {
+        /* Target ONLY top-level React Navigation stack containers */
+        #root,
+        #root > div,
+        #root > div > div {
           min-height: 100% !important;
+          height: auto !important;
           width: 100% !important;
+          position: relative !important;
+          overflow: visible !important;
           background-color: ${COLORS.background} !important;
         }
 
-        /* Disable absolute clipping in React Navigation cards on Web */
-        #root div[style*="position: absolute"] {
-          position: relative !important;
-          min-height: 100% !important;
-          height: auto !important;
-          overflow: visible !important;
-        }
-
-        #root div[style*="overflow: hidden"] {
-          overflow: visible !important;
-        }
-
-        /* Native Browser Scrollbar - Clean & Simple like Port 3000 */
+        /* Standard native browser scrollbar like port 3000 */
         ::-webkit-scrollbar {
           width: 12px !important;
         }
