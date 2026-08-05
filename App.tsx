@@ -28,38 +28,49 @@ export default function App() {
         document.head.appendChild(style);
       }
       style.innerHTML = `
-        html {
-          overflow-y: scroll !important;
-          overflow-x: hidden !important;
+        /* Ensure normal native browser scrolling like port 3000 */
+        html, body {
           height: 100% !important;
           width: 100% !important;
+          overflow-y: auto !important;
+          overflow-x: hidden !important;
           margin: 0 !important;
           padding: 0 !important;
           background-color: ${COLORS.background} !important;
         }
-        body, #root, #root > div {
+
+        #root, #root > div {
           min-height: 100% !important;
           width: 100% !important;
-          margin: 0 !important;
-          padding: 0 !important;
           background-color: ${COLORS.background} !important;
         }
-        
-        /* Custom Solid Gold Scrollbar - Always Active */
+
+        /* Disable absolute clipping in React Navigation cards on Web */
+        #root div[style*="position: absolute"] {
+          position: relative !important;
+          min-height: 100% !important;
+          height: auto !important;
+          overflow: visible !important;
+        }
+
+        #root div[style*="overflow: hidden"] {
+          overflow: visible !important;
+        }
+
+        /* Native Browser Scrollbar - Clean & Simple like Port 3000 */
         ::-webkit-scrollbar {
           width: 12px !important;
-          background: #09090b !important;
         }
         ::-webkit-scrollbar-track {
-          background: #09090b !important;
+          background: #121215 !important;
         }
         ::-webkit-scrollbar-thumb {
-          background: #d97706 !important;
+          background: #3f3f46 !important;
           border-radius: 6px !important;
-          border: 2px solid #09090b !important;
+          border: 2px solid #121215 !important;
         }
         ::-webkit-scrollbar-thumb:hover {
-          background: #fbbf24 !important;
+          background: #71717a !important;
         }
       `;
     }
