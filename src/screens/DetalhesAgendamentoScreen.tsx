@@ -121,9 +121,14 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
 
   return (
     <View style={styles.container}>
-      <Header title="DETALHES DO AGENDAMENTO" subtitle={`Código do Agendamento: #${agendamento.id}`} />
+      <Header
+        title="DETALHES"
+        subtitle={`Código: #${agendamento.id}`}
+        showBackButton={true}
+        onBackPress={() => navigation.goBack()}
+      />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={true}>
         {/* Card Principal de Resumo */}
         <Card style={styles.mainCard}>
           <Card.Content>

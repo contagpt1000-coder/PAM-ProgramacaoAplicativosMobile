@@ -106,9 +106,14 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
 
   return (
     <View style={styles.container}>
-      <Header title="NOVO AGENDAMENTO" subtitle="Preencha os dados do cliente e horário" />
+      <Header
+        title="NOVO AGENDAMENTO"
+        subtitle="Preencha os dados do cliente e horário"
+        showBackButton={true}
+        onBackPress={() => navigation.goBack()}
+      />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={true}>
         {/* PASSO 1: Seleção de Serviço */}
         <Text style={styles.sectionTitle}>1. SELECIONE O SERVIÇO</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
@@ -242,8 +247,10 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
           activeOutlineColor={COLORS.primary}
           style={styles.input}
         />
+      </ScrollView>
 
-        {/* Botão de Envio */}
+      {/* Botão de Envio Fixo / Sticky na parte inferior */}
+      <View style={styles.fixedBottomBar}>
         <Button
           mode="contained"
           onPress={handleSubmit}
@@ -252,12 +259,13 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
           buttonColor={COLORS.primary}
           textColor={COLORS.background}
           style={styles.submitButton}
-          contentStyle={{ paddingVertical: 8 }}
-          accessibilityLabel="Salvar agendamento"
+          contentStyle={{ height: 50, justifyContent: 'center' }}
+          labelStyle={{ fontSize: 15, fontWeight: '800', letterSpacing: 1 }}
+          accessibilityLabel="Confirmar e salvar agendamento"
         >
-          SALVAR AGENDAMENTO
+          CONFIRMAR AGENDAMENTO
         </Button>
-      </ScrollView>
+      </View>
     </View>
   );
 };
@@ -269,7 +277,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 40,
+    paddingBottom: 110, // Espaço para a barra fixa inferior não cobrir o conteúdo
   },
   sectionTitle: {
     fontSize: 12,
@@ -404,10 +412,15 @@ const styles = StyleSheet.create({
     color: COLORS.background,
     fontWeight: '800',
   },
+  fixedBottomBar: {
+    backgroundColor: COLORS.cardBackground,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.cardBorder,
+  },
   submitButton: {
-    marginTop: 16,
     borderRadius: 8,
-    minHeight: 48,
-    justifyContent: 'center',
+    elevation: 4,
   },
 });
