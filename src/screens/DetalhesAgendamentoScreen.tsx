@@ -3,10 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   Alert,
   TouchableOpacity,
-  Platform,
 } from 'react-native';
 import { Button, Card, Chip, Dialog, Portal, TextInput } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -133,12 +131,7 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
         onBackPress={() => navigation.goBack()}
       />
 
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-        scrollEnabled={Platform.OS !== 'web'}
-        showsVerticalScrollIndicator={false}
-      >
+      <View style={styles.formWrapper}>
         {/* Card Principal de Resumo */}
         <Card style={styles.mainCard}>
           <Card.Content>
@@ -295,7 +288,7 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
         >
           EXCLUIR DO HISTÓRICO
         </Button>
-      </ScrollView>
+      </View>
 
       {/* Modal de Confirmação de Exclusão */}
       <Portal>
@@ -356,17 +349,13 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    minHeight: '100%',
     backgroundColor: COLORS.background,
   },
-  scrollView: {
+  formWrapper: {
     width: '100%',
-  },
-  scrollContent: {
     paddingHorizontal: 24,
     paddingTop: 16,
     paddingBottom: 60,
-    width: '100%',
   },
   mainCard: {
     backgroundColor: COLORS.cardBackground,

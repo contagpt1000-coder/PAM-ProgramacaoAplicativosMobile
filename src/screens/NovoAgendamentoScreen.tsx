@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Alert,
   Image,
-  Platform,
 } from 'react-native';
 import { TextInput, Button, Card } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -114,12 +113,7 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
         onBackPress={() => navigation.goBack()}
       />
 
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-        scrollEnabled={Platform.OS !== 'web'}
-        showsVerticalScrollIndicator={false}
-      >
+      <View style={styles.formWrapper}>
         {/* PASSO 1: Seleção de Serviço */}
         <Text style={styles.sectionTitle}>1. SELECIONE O SERVIÇO</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
@@ -254,7 +248,7 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
           style={styles.input}
         />
 
-        {/* Botão de Envio com Destaque Dourado no final do formulário */}
+        {/* Botão Único de Envio com Destaque Dourado */}
         <View style={styles.submitContainer}>
           <Button
             mode="contained"
@@ -271,7 +265,7 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
             CONFIRMAR AGENDAMENTO
           </Button>
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 };
@@ -279,17 +273,13 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    minHeight: '100%',
     backgroundColor: COLORS.background,
   },
-  scrollView: {
+  formWrapper: {
     width: '100%',
-  },
-  scrollContent: {
     paddingHorizontal: 24,
     paddingTop: 12,
     paddingBottom: 80,
-    width: '100%',
   },
   sectionTitle: {
     fontSize: 12,
