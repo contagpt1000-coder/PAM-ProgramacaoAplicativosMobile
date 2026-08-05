@@ -1,3 +1,16 @@
+const jsonServer = require('json-server');
+const path = require('path');
+
+const server = jsonServer.create();
+const router = jsonServer.router(path.join(__dirname, 'db.json'));
+const middlewares = jsonServer.defaults();
+
+server.use(middlewares);
+
+// Custom HTML Dashboard at root GET /
+server.get('/', (req, res, next) => {
+  if (req.headers.accept && req.headers.accept.includes('text/html')) {
+    return res.send(`
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -38,22 +51,18 @@
     .status-agendado { color: var(--gold); background: rgba(251,191,36,0.15); padding: 3px 8px; border-radius: 12px; font-weight: 700; font-size: 11px; }
     .status-concluido { color: var(--green); background: rgba(16,185,129,0.15); padding: 3px 8px; border-radius: 12px; font-weight: 700; font-size: 11px; }
     .status-cancelado { color: var(--red); background: rgba(239,68,68,0.15); padding: 3px 8px; border-radius: 12px; font-weight: 700; font-size: 11px; }
-
-    pre { background: #121215; border: 1px solid var(--border); padding: 16px; border-radius: 10px; color: var(--gold); font-size: 12px; overflow-x: auto; max-height: 250px; }
   </style>
 </head>
 <body>
-
   <div class="header">
     <div>
       <div class="logo">BARBERFLOW API</div>
       <div class="subtitle">Painel de Controle REST HTTP • Disciplina PAM</div>
     </div>
-    <div class="badge">JSON-SERVER ATIVO</div>
+    <div class="badge">JSON-SERVER ATIVO (:3000)</div>
   </div>
 
   <div class="grid">
-    <!-- Card Agendamentos -->
     <div class="card">
       <div class="card-title">
         <span>AGENDAMENTOS</span>
@@ -62,7 +71,6 @@
       <div id="agendamentos-table">Carregando...</div>
     </div>
 
-    <!-- Card Serviços -->
     <div class="card">
       <div class="card-title">
         <span>SERVIÇOS OFERECIDOS</span>
@@ -71,7 +79,6 @@
       <div id="servicos-table">Carregando...</div>
     </div>
 
-    <!-- Card Profissionais -->
     <div class="card">
       <div class="card-title">
         <span>PROFISSIONAIS</span>
@@ -85,35 +92,32 @@
     async function loadData() {
       try {
         const [agRes, serRes, profRes] = await Promise.all([
-          fetch('/agendamentos'),
-          fetch('/servicos'),
-          fetch('/profissionais')
+          fetch('http://localhost:3000/agendamentos'),
+          fetch('http://localhost:3000/servicos'),
+          fetch('http://localhost:3000/profissionais')
         ]);
         const agendamentos = await agRes.json();
         const servicos = await serRes.json();
         const profissionais = await profRes.json();
 
-        // Render Agendamentos
         let agHTML = '<table><thead><tr><th>Cliente</th><th>Data/Hora</th><th>Status</th></tr></thead><tbody>';
         agendamentos.forEach(a => {
-          const statusClass = `status-${a.status}`;
-          agHTML += `<tr><td><b>${a.clienteNome}</b><br><small style="color:#a1a1aa">${a.clienteTelefone}</small></td><td>${a.data}<br>${a.hora}</td><td><span class="${statusClass}">${a.status.toUpperCase()}</span></td></tr>`;
+          const statusClass = 'status-' + a.status;
+          agHTML += '<tr><td><b>' + a.clienteNome + '</b><br><small style="color:#a1a1aa">' + a.clienteTelefone + '</small></td><td>' + a.data + '<br>' + a.hora + '</td><td><span class="' + statusClass + '">' + a.status.toUpperCase() + '</span></td></tr>';
         });
         agHTML += '</tbody></table>';
         document.getElementById('agendamentos-table').innerHTML = agHTML;
 
-        // Render Serviços
         let serHTML = '<table><thead><tr><th>Serviço</th><th>Preço</th><th>Duração</th></tr></thead><tbody>';
         servicos.forEach(s => {
-          serHTML += `<tr><td><b>${s.nome}</b></td><td style="color:var(--gold);font-weight:700">R$ ${s.preco.toFixed(2)}</td><td>${s.duracaoMinutos} min</td></tr>`;
+          serHTML += '<tr><td><b>' + s.nome + '</b></td><td style="color:var(--gold);font-weight:700">R$ ' + s.preco.toFixed(2) + '</td><td>' + s.duracaoMinutos + ' min</td></tr>';
         });
         serHTML += '</tbody></table>';
         document.getElementById('servicos-table').innerHTML = serHTML;
 
-        // Render Profissionais
         let profHTML = '<table><thead><tr><th>Nome</th><th>Especialidade</th></tr></thead><tbody>';
         profissionais.forEach(p => {
-          profHTML += `<tr><td><b>${p.nome}</b></td><td>${p.especialidade}</td></tr>`;
+          profHTML += '<tr><td><b>' + p.nome + '</b></td><td>' + p.especialidade + '</td></tr>';
         });
         profHTML += '</tbody></table>';
         document.getElementById('profissionais-table').innerHTML = profHTML;
@@ -126,3 +130,14 @@
   </script>
 </body>
 </html>
+    `);
+  }
+  next();
+});
+
+server.use(router);
+
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(`JSON Server rodando na porta ${PORT} com painel customizado!`);
+});
