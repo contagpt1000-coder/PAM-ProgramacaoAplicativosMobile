@@ -84,129 +84,123 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.contentWrapper}>
-        <Header />
+      <Header />
 
-        {/* Métricas / Dashboard Resumo */}
-        <View style={styles.metricsRow}>
-          <View style={styles.metricCard}>
-            <Text style={styles.metricNumber}>{totalCount}</Text>
-            <Text style={styles.metricLabel}>TOTAL</Text>
-          </View>
-          <View style={styles.metricCard}>
-            <Text style={[styles.metricNumber, { color: COLORS.statusAgendado }]}>
-              {agendadosCount}
-            </Text>
-            <Text style={styles.metricLabel}>AGENDADOS</Text>
-          </View>
-          <View style={styles.metricCard}>
-            <Text style={[styles.metricNumber, { color: COLORS.statusConcluido }]}>
-              {concluidosCount}
-            </Text>
-            <Text style={styles.metricLabel}>CONCLUÍDOS</Text>
-          </View>
+      {/* Métricas / Dashboard Resumo em Largura Total */}
+      <View style={styles.metricsRow}>
+        <View style={styles.metricCard}>
+          <Text style={styles.metricNumber}>{totalCount}</Text>
+          <Text style={styles.metricLabel}>TOTAL</Text>
         </View>
-
-        {/* Busca e Filtros */}
-        <View style={styles.searchRow}>
-          <Searchbar
-            placeholder="Buscar por cliente, serviço..."
-            placeholderTextColor={COLORS.textSecondary}
-            onChangeText={setSearchQuery}
-            value={searchQuery}
-            style={styles.searchBar}
-            inputStyle={{ color: COLORS.textPrimary }}
-            iconColor={COLORS.primary}
-            accessibilityLabel="Campo de busca de agendamentos"
-          />
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={() => setIsFilterModalOpen(true)}
-            accessibilityRole="button"
-            accessibilityLabel="Abrir modal de filtros"
-          >
-            <Text style={styles.filterButtonText}>Filtros</Text>
-          </TouchableOpacity>
+        <View style={styles.metricCard}>
+          <Text style={[styles.metricNumber, { color: COLORS.statusAgendado }]}>
+            {agendadosCount}
+          </Text>
+          <Text style={styles.metricLabel}>AGENDADOS</Text>
         </View>
-
-        {/* Lista Principal de Agendamentos */}
-        <FlatList
-          data={filteredAgendamentos}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => (
-            <AgendamentoCard
-              agendamento={item}
-              onPress={(id) => navigation.navigate('DetalhesAgendamento', { id })}
-              onStatusChange={handleStatusChange}
-            />
-          )}
-          contentContainerStyle={styles.listContent}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          removeClippedSubviews={true}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={COLORS.primary}
-              colors={[COLORS.primary]}
-            />
-          }
-          ListEmptyComponent={
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyTitle}>NENHUM AGENDAMENTO ENCONTRADO</Text>
-              <Text style={styles.emptySubtitle}>
-                Toque no botão "+" para criar um novo agendamento no sistema.
-              </Text>
-            </View>
-          }
-        />
-
-        {/* FAB para criar novo agendamento */}
-        <FAB
-          icon="plus"
-          label="NOVO AGENDAMENTO"
-          style={styles.fab}
-          color={COLORS.background}
-          onPress={() => navigation.navigate('NovoAgendamento')}
-          accessibilityLabel="Novo agendamento"
-        />
-
-        {/* Modal de Filtro */}
-        <FilterModal
-          visible={isFilterModalOpen}
-          currentStatus={statusFilter}
-          currentDate={dateFilter}
-          onDismiss={() => setIsFilterModalOpen(false)}
-          onApplyFilters={(status, date) => {
-            setStatusFilter(status);
-            setDateFilter(date);
-          }}
-        />
+        <View style={styles.metricCard}>
+          <Text style={[styles.metricNumber, { color: COLORS.statusConcluido }]}>
+            {concluidosCount}
+          </Text>
+          <Text style={styles.metricLabel}>CONCLUÍDOS</Text>
+        </View>
       </View>
+
+      {/* Busca e Filtros em Largura Total */}
+      <View style={styles.searchRow}>
+        <Searchbar
+          placeholder="Buscar por cliente, serviço..."
+          placeholderTextColor={COLORS.textSecondary}
+          onChangeText={setSearchQuery}
+          value={searchQuery}
+          style={styles.searchBar}
+          inputStyle={{ color: COLORS.textPrimary }}
+          iconColor={COLORS.primary}
+          accessibilityLabel="Campo de busca de agendamentos"
+        />
+        <TouchableOpacity
+          style={styles.filterButton}
+          onPress={() => setIsFilterModalOpen(true)}
+          accessibilityRole="button"
+          accessibilityLabel="Abrir modal de filtros"
+        >
+          <Text style={styles.filterButtonText}>Filtros</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Lista Principal de Agendamentos */}
+      <FlatList
+        data={filteredAgendamentos}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item }) => (
+          <AgendamentoCard
+            agendamento={item}
+            onPress={(id) => navigation.navigate('DetalhesAgendamento', { id })}
+            onStatusChange={handleStatusChange}
+          />
+        )}
+        scrollEnabled={Platform.OS !== 'web'}
+        contentContainerStyle={styles.listContent}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        removeClippedSubviews={true}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={COLORS.primary}
+            colors={[COLORS.primary]}
+          />
+        }
+        ListEmptyComponent={
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyTitle}>NENHUM AGENDAMENTO ENCONTRADO</Text>
+            <Text style={styles.emptySubtitle}>
+              Toque no botão "+" para criar um novo agendamento no sistema.
+            </Text>
+          </View>
+        }
+      />
+
+      {/* FAB para criar novo agendamento */}
+      <FAB
+        icon="plus"
+        label="NOVO AGENDAMENTO"
+        style={styles.fab}
+        color={COLORS.background}
+        onPress={() => navigation.navigate('NovoAgendamento')}
+        accessibilityLabel="Novo agendamento"
+      />
+
+      {/* Modal de Filtro */}
+      <FilterModal
+        visible={isFilterModalOpen}
+        currentStatus={statusFilter}
+        currentDate={dateFilter}
+        onDismiss={() => setIsFilterModalOpen(false)}
+        onApplyFilters={(status, date) => {
+          setStatusFilter(status);
+          setDateFilter(date);
+        }}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: '100%',
     width: '100%',
+    minHeight: '100%',
     backgroundColor: COLORS.background,
-  },
-  contentWrapper: {
-    minHeight: '100%',
-    width: '100%',
-    maxWidth: 1000,
-    alignSelf: 'center',
   },
   metricsRow: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingTop: 16,
     paddingBottom: 8,
     gap: 12,
+    width: '100%',
   },
   metricCard: {
     flex: 1,
@@ -231,10 +225,11 @@ const styles = StyleSheet.create({
   },
   searchRow: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     marginVertical: 12,
     gap: 12,
     alignItems: 'center',
+    width: '100%',
   },
   searchBar: {
     flex: 1,
@@ -260,8 +255,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   listContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 120,
+    paddingHorizontal: 24,
+    paddingBottom: 100,
+    width: '100%',
   },
   emptyState: {
     padding: 32,
@@ -283,7 +279,7 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: Platform.OS === 'web' ? ('fixed' as any) : 'absolute',
-    margin: 20,
+    margin: 24,
     right: 28,
     bottom: 28,
     backgroundColor: COLORS.primary,

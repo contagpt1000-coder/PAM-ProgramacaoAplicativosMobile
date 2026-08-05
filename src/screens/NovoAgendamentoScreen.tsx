@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   Image,
+  Platform,
 } from 'react-native';
 import { TextInput, Button, Card } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -106,196 +107,189 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
 
   return (
     <View style={styles.container}>
-      <View style={styles.contentWrapper}>
-        <Header
-          title="NOVO AGENDAMENTO"
-          subtitle="Preencha os dados do cliente e horário"
-          showBackButton={true}
-          onBackPress={() => navigation.goBack()}
+      <Header
+        title="NOVO AGENDAMENTO"
+        subtitle="Preencha os dados do cliente e horário"
+        showBackButton={true}
+        onBackPress={() => navigation.goBack()}
+      />
+
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        scrollEnabled={Platform.OS !== 'web'}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* PASSO 1: Seleção de Serviço */}
+        <Text style={styles.sectionTitle}>1. SELECIONE O SERVIÇO</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
+          {servicos.map((s) => {
+            const isSelected = selectedServicoId === s.id;
+            return (
+              <TouchableOpacity
+                key={s.id}
+                onPress={() => setSelectedServicoId(s.id)}
+                activeOpacity={0.8}
+                accessibilityRole="button"
+                accessibilityLabel={`Serviço ${s.nome}, valor ${formatCurrency(s.preco)}`}
+              >
+                <Card style={[styles.servicoCard, isSelected && styles.selectedCard]}>
+                  <Card.Content style={styles.cardContent}>
+                    <Text style={styles.servicoNome}>{s.nome}</Text>
+                    <Text style={styles.servicoDesc}>{s.descricao}</Text>
+                    <View style={styles.servicoFooter}>
+                      <Text style={styles.servicoPreco}>{formatCurrency(s.preco)}</Text>
+                      <Text style={styles.servicoDuracao}>{s.duracaoMinutos} min</Text>
+                    </View>
+                  </Card.Content>
+                </Card>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+
+        {/* PASSO 2: Seleção de Profissional */}
+        <Text style={styles.sectionTitle}>2. SELECIONE O PROFISSIONAL</Text>
+        <View style={styles.profissionaisGrid}>
+          {profissionais.map((p) => {
+            const isSelected = selectedProfissionalId === p.id;
+            return (
+              <TouchableOpacity
+                key={p.id}
+                style={[styles.profCard, isSelected && styles.selectedCard]}
+                onPress={() => setSelectedProfissionalId(p.id)}
+                activeOpacity={0.8}
+                accessibilityRole="button"
+                accessibilityLabel={`Profissional ${p.nome}`}
+              >
+                {p.avatarUrl ? (
+                  <Image source={{ uri: p.avatarUrl }} style={styles.avatar} />
+                ) : (
+                  <View style={[styles.avatar, styles.avatarPlaceholder]}>
+                    <Text style={styles.avatarLetter}>{p.nome.charAt(0)}</Text>
+                  </View>
+                )}
+                <Text style={styles.profNome}>{p.nome}</Text>
+                <Text style={styles.profEspecialidade}>{p.especialidade}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        {/* PASSO 3: Dados do Cliente */}
+        <Text style={styles.sectionTitle}>3. DADOS DO CLIENTE</Text>
+        <TextInput
+          label="Nome Completo do Cliente *"
+          mode="outlined"
+          value={clienteNome}
+          onChangeText={setClienteNome}
+          textColor={COLORS.textPrimary}
+          outlineColor={COLORS.cardBorder}
+          activeOutlineColor={COLORS.primary}
+          style={styles.input}
+          maxLength={100}
         />
 
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={true}
-        >
-          {/* PASSO 1: Seleção de Serviço */}
-          <Text style={styles.sectionTitle}>1. SELECIONE O SERVIÇO</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
-            {servicos.map((s) => {
-              const isSelected = selectedServicoId === s.id;
-              return (
-                <TouchableOpacity
-                  key={s.id}
-                  onPress={() => setSelectedServicoId(s.id)}
-                  activeOpacity={0.8}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Serviço ${s.nome}, valor ${formatCurrency(s.preco)}`}
-                >
-                  <Card style={[styles.servicoCard, isSelected && styles.selectedCard]}>
-                    <Card.Content style={styles.cardContent}>
-                      <Text style={styles.servicoNome}>{s.nome}</Text>
-                      <Text style={styles.servicoDesc}>{s.descricao}</Text>
-                      <View style={styles.servicoFooter}>
-                        <Text style={styles.servicoPreco}>{formatCurrency(s.preco)}</Text>
-                        <Text style={styles.servicoDuracao}>{s.duracaoMinutos} min</Text>
-                      </View>
-                    </Card.Content>
-                  </Card>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
+        <TextInput
+          label="Telefone com DDD *"
+          mode="outlined"
+          keyboardType="phone-pad"
+          value={clienteTelefone}
+          onChangeText={handlePhoneChange}
+          placeholder="(85) 99999-9999"
+          textColor={COLORS.textPrimary}
+          outlineColor={COLORS.cardBorder}
+          activeOutlineColor={COLORS.primary}
+          style={styles.input}
+          maxLength={15}
+        />
 
-          {/* PASSO 2: Seleção de Profissional */}
-          <Text style={styles.sectionTitle}>2. SELECIONE O PROFISSIONAL</Text>
-          <View style={styles.profissionaisGrid}>
-            {profissionais.map((p) => {
-              const isSelected = selectedProfissionalId === p.id;
-              return (
-                <TouchableOpacity
-                  key={p.id}
-                  style={[styles.profCard, isSelected && styles.selectedCard]}
-                  onPress={() => setSelectedProfissionalId(p.id)}
-                  activeOpacity={0.8}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Profissional ${p.nome}`}
-                >
-                  {p.avatarUrl ? (
-                    <Image source={{ uri: p.avatarUrl }} style={styles.avatar} />
-                  ) : (
-                    <View style={[styles.avatar, styles.avatarPlaceholder]}>
-                      <Text style={styles.avatarLetter}>{p.nome.charAt(0)}</Text>
-                    </View>
-                  )}
-                  <Text style={styles.profNome}>{p.nome}</Text>
-                  <Text style={styles.profEspecialidade}>{p.especialidade}</Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
+        {/* PASSO 4: Data e Hora */}
+        <Text style={styles.sectionTitle}>4. DATA & HORÁRIO</Text>
+        <TextInput
+          label="Data do Agendamento (AAAA-MM-DD) *"
+          mode="outlined"
+          value={dataAgendamento}
+          onChangeText={setDataAgendamento}
+          keyboardType="numeric"
+          maxLength={10}
+          textColor={COLORS.textPrimary}
+          outlineColor={COLORS.cardBorder}
+          activeOutlineColor={COLORS.primary}
+          style={styles.input}
+        />
 
-          {/* PASSO 3: Dados do Cliente */}
-          <Text style={styles.sectionTitle}>3. DADOS DO CLIENTE</Text>
-          <TextInput
-            label="Nome Completo do Cliente *"
-            mode="outlined"
-            value={clienteNome}
-            onChangeText={setClienteNome}
-            textColor={COLORS.textPrimary}
-            outlineColor={COLORS.cardBorder}
-            activeOutlineColor={COLORS.primary}
-            style={styles.input}
-            maxLength={100}
-          />
+        <Text style={styles.subTitleLabel}>Grade de Horários Disponíveis:</Text>
+        <View style={styles.horariosGrid}>
+          {HORARIOS_DISPONIVEIS.map((h) => {
+            const isSelected = horaAgendamento === h;
+            return (
+              <TouchableOpacity
+                key={h}
+                style={[styles.horaChip, isSelected && styles.horaChipSelected]}
+                onPress={() => setHoraAgendamento(h)}
+                accessibilityRole="button"
+                accessibilityLabel={`Horário ${h}`}
+              >
+                <Text style={[styles.horaText, isSelected && styles.horaTextSelected]}>
+                  {h}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
 
-          <TextInput
-            label="Telefone com DDD *"
-            mode="outlined"
-            keyboardType="phone-pad"
-            value={clienteTelefone}
-            onChangeText={handlePhoneChange}
-            placeholder="(85) 99999-9999"
-            textColor={COLORS.textPrimary}
-            outlineColor={COLORS.cardBorder}
-            activeOutlineColor={COLORS.primary}
-            style={styles.input}
-            maxLength={15}
-          />
+        {/* PASSO 5: Observações Opcionais */}
+        <Text style={styles.sectionTitle}>5. OBSERVAÇÕES (OPCIONAL)</Text>
+        <TextInput
+          label="Notas adicionais"
+          mode="outlined"
+          multiline
+          numberOfLines={3}
+          value={observacoes}
+          onChangeText={setObservacoes}
+          textColor={COLORS.textPrimary}
+          outlineColor={COLORS.cardBorder}
+          activeOutlineColor={COLORS.primary}
+          style={styles.input}
+        />
 
-          {/* PASSO 4: Data e Hora */}
-          <Text style={styles.sectionTitle}>4. DATA & HORÁRIO</Text>
-          <TextInput
-            label="Data do Agendamento (AAAA-MM-DD) *"
-            mode="outlined"
-            value={dataAgendamento}
-            onChangeText={setDataAgendamento}
-            keyboardType="numeric"
-            maxLength={10}
-            textColor={COLORS.textPrimary}
-            outlineColor={COLORS.cardBorder}
-            activeOutlineColor={COLORS.primary}
-            style={styles.input}
-          />
-
-          <Text style={styles.subTitleLabel}>Grade de Horários Disponíveis:</Text>
-          <View style={styles.horariosGrid}>
-            {HORARIOS_DISPONIVEIS.map((h) => {
-              const isSelected = horaAgendamento === h;
-              return (
-                <TouchableOpacity
-                  key={h}
-                  style={[styles.horaChip, isSelected && styles.horaChipSelected]}
-                  onPress={() => setHoraAgendamento(h)}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Horário ${h}`}
-                >
-                  <Text style={[styles.horaText, isSelected && styles.horaTextSelected]}>
-                    {h}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-
-          {/* PASSO 5: Observações Opcionais */}
-          <Text style={styles.sectionTitle}>5. OBSERVAÇÕES (OPCIONAL)</Text>
-          <TextInput
-            label="Notas adicionais"
-            mode="outlined"
-            multiline
-            numberOfLines={3}
-            value={observacoes}
-            onChangeText={setObservacoes}
-            textColor={COLORS.textPrimary}
-            outlineColor={COLORS.cardBorder}
-            activeOutlineColor={COLORS.primary}
-            style={styles.input}
-          />
-
-          {/* Botão Único de Envio com Destaque Dourado */}
-          <View style={styles.submitContainer}>
-            <Button
-              mode="contained"
-              onPress={handleSubmit}
-              loading={submitting}
-              disabled={submitting}
-              buttonColor={COLORS.primary}
-              textColor={COLORS.background}
-              style={styles.submitButton}
-              contentStyle={{ height: 54, justifyContent: 'center' }}
-              labelStyle={{ fontSize: 16, fontWeight: '800', letterSpacing: 1 }}
-              accessibilityLabel="Confirmar e salvar agendamento"
-            >
-              CONFIRMAR AGENDAMENTO
-            </Button>
-          </View>
-        </ScrollView>
-      </View>
+        {/* Botão de Envio com Destaque Dourado no final do formulário */}
+        <View style={styles.submitContainer}>
+          <Button
+            mode="contained"
+            onPress={handleSubmit}
+            loading={submitting}
+            disabled={submitting}
+            buttonColor={COLORS.primary}
+            textColor={COLORS.background}
+            style={styles.submitButton}
+            contentStyle={{ height: 54, justifyContent: 'center' }}
+            labelStyle={{ fontSize: 16, fontWeight: '800', letterSpacing: 1 }}
+            accessibilityLabel="Confirmar e salvar agendamento"
+          >
+            CONFIRMAR AGENDAMENTO
+          </Button>
+        </View>
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     width: '100%',
+    minHeight: '100%',
     backgroundColor: COLORS.background,
   },
-  contentWrapper: {
-    flex: 1,
-    width: '100%',
-    maxWidth: 1000,
-    alignSelf: 'center',
-  },
   scrollView: {
-    flex: 1,
     width: '100%',
   },
   scrollContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingTop: 12,
     paddingBottom: 80,
+    width: '100%',
   },
   sectionTitle: {
     fontSize: 12,
@@ -309,7 +303,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   servicoCard: {
-    width: 240,
+    width: 260,
     backgroundColor: COLORS.cardBackground,
     marginRight: 12,
     borderRadius: 12,
@@ -354,6 +348,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     marginBottom: 12,
+    width: '100%',
   },
   profCard: {
     flex: 1,
@@ -395,6 +390,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: COLORS.cardBackground,
     marginBottom: 12,
+    width: '100%',
   },
   subTitleLabel: {
     fontSize: 12,
@@ -406,6 +402,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 10,
     marginBottom: 16,
+    width: '100%',
   },
   horaChip: {
     backgroundColor: COLORS.cardBackground,
@@ -433,9 +430,11 @@ const styles = StyleSheet.create({
   submitContainer: {
     marginTop: 24,
     marginBottom: 40,
+    width: '100%',
   },
   submitButton: {
     borderRadius: 10,
     elevation: 4,
+    width: '100%',
   },
 });

@@ -28,9 +28,9 @@ export default function App() {
         document.head.appendChild(style);
       }
       style.innerHTML = `
-        html, body, #root, #root > div, [data-reactroot] {
+        html, body, #root, #root > div {
           min-height: 100vh !important;
-          height: auto !important;
+          width: 100% !important;
           overflow-y: auto !important;
           overflow-x: hidden !important;
           margin: 0 !important;
@@ -38,18 +38,17 @@ export default function App() {
           background-color: ${COLORS.background} !important;
         }
         
-        /* Custom Gold Scrollbar */
+        /* Single Scrollbar at the far right edge of the browser window */
         ::-webkit-scrollbar {
           width: 12px !important;
-          display: block !important;
         }
         ::-webkit-scrollbar-track {
-          background: #121215 !important;
+          background: #09090b !important;
         }
         ::-webkit-scrollbar-thumb {
           background: #d97706 !important;
           border-radius: 6px !important;
-          border: 2px solid #121215 !important;
+          border: 2px solid #09090b !important;
         }
         ::-webkit-scrollbar-thumb:hover {
           background: #fbbf24 !important;

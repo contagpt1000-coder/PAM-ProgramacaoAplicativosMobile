@@ -6,6 +6,7 @@ import {
   ScrollView,
   Alert,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { Button, Card, Chip, Dialog, Portal, TextInput } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -132,7 +133,12 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
         onBackPress={() => navigation.goBack()}
       />
 
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={true}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        scrollEnabled={Platform.OS !== 'web'}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Card Principal de Resumo */}
         <Card style={styles.mainCard}>
           <Card.Content>
@@ -349,18 +355,18 @@ export const DetalhesAgendamentoScreen: React.FC<DetalhesAgendamentoScreenProps>
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     width: '100%',
+    minHeight: '100%',
     backgroundColor: COLORS.background,
   },
   scrollView: {
-    flex: 1,
     width: '100%',
   },
   scrollContent: {
     paddingHorizontal: 24,
     paddingTop: 16,
     paddingBottom: 60,
+    width: '100%',
   },
   mainCard: {
     backgroundColor: COLORS.cardBackground,
@@ -368,6 +374,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
     marginBottom: 20,
+    width: '100%',
   },
   headerRow: {
     flexDirection: 'row',
@@ -463,6 +470,7 @@ const styles = StyleSheet.create({
   actionsContainer: {
     gap: 10,
     marginBottom: 16,
+    width: '100%',
   },
   actionButton: {
     borderRadius: 8,
