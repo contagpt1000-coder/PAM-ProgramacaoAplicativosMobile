@@ -48,7 +48,7 @@ export default function App() {
         document.head.appendChild(iconStyle);
       }
 
-      // 3. Inject Rich Dark Gold Radial Gradient Background & Hover Animations CSS Engine
+      // 3. Inject Precise Dark Gold CSS Engine (Subtle Radial Background + Controlled Hover Glow)
       const styleId = 'web-scroll-fix';
       let style = document.getElementById(styleId) as HTMLStyleElement;
       if (!style) {
@@ -70,7 +70,7 @@ export default function App() {
           box-sizing: border-box !important;
         }
 
-        /* 100% VISIBLE RICH DARK GOLD RADIAL GRADIENT BACKGROUND */
+        /* Continuous Subtle Gold Radial Background */
         html, body {
           height: 100% !important;
           width: 100% !important;
@@ -79,25 +79,19 @@ export default function App() {
           margin: 0 !important;
           padding: 0 !important;
           background-color: #0a0a0d !important;
-          background-image: 
-            radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.22) 0%, transparent 65%),
-            radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.15) 0%, transparent 45%),
-            radial-gradient(circle at 0% 50%, rgba(245, 158, 11, 0.12) 0%, transparent 50%) !important;
+          background-image: radial-gradient(circle at 50% -10%, rgba(245, 158, 11, 0.16) 0%, rgba(10, 10, 13, 1) 75%) !important;
           background-attachment: fixed !important;
         }
 
-        /* Force transparent containers so the body radial gradient is 100% visible */
         #root,
         #root > div,
-        #root > div > div,
-        div[class*="r-backgroundColor"] {
+        #root > div > div {
+          min-height: 100% !important;
+          height: auto !important;
+          width: 100% !important;
+          position: relative !important;
+          overflow: visible !important;
           background-color: transparent !important;
-        }
-
-        /* Re-apply dark glass background ONLY on cards and inputs */
-        div[class*="r-borderRadius"] {
-          background-color: rgba(18, 18, 24, 0.92) !important;
-          backdrop-filter: blur(12px) !important;
         }
 
         /* Native Browser Scrollbar */
@@ -116,23 +110,14 @@ export default function App() {
           background: #fbbf24 !important;
         }
 
-        /* HOVER MICRO-ANIMATION & BRIGHT GOLD BORDER GLOW */
-        div[role="button"],
-        button,
-        div[class*="r-borderRadius"] {
-          transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
-                      border-color 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
-                      box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
-                      background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        /* Smooth transitions for interactive items */
+        .card-hoverable {
+          transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease !important;
         }
-
-        div[role="button"]:hover,
-        button:hover,
-        div[class*="r-borderRadius"]:hover {
-          transform: translateY(-4px) scale(1.008) !important;
-          border-color: #f59e0b !important;
-          box-shadow: 0 14px 32px rgba(245, 158, 11, 0.35), inset 0 0 15px rgba(251, 191, 36, 0.15) !important;
-          background-color: #181824 !important;
+        .card-hoverable:hover {
+          transform: translateY(-3px) !important;
+          border-color: rgba(245, 158, 11, 0.7) !important;
+          box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2) !important;
         }
       `;
     }

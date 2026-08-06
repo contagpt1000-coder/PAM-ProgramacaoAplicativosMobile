@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   card: {
-    backgroundColor: COLORS.cardBackground,
+    backgroundColor: 'rgba(18, 18, 24, 0.9)',
     borderRadius: 16,
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
@@ -274,12 +274,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   quickButtonConcluir: {
-    backgroundColor: 'rgba(16, 185, 129, 0.12)',
-    borderColor: 'rgba(16, 185, 129, 0.35)',
+    backgroundColor: 'rgba(16, 185, 129, 0.14)',
+    borderColor: 'rgba(16, 185, 129, 0.4)',
   },
   quickButtonCancelar: {
-    backgroundColor: 'rgba(239, 68, 68, 0.12)',
-    borderColor: 'rgba(239, 68, 68, 0.35)',
+    backgroundColor: 'rgba(239, 68, 68, 0.14)',
+    borderColor: 'rgba(239, 68, 68, 0.4)',
   },
   quickButtonText: {
     fontSize: 12,

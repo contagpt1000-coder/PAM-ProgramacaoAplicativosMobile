@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgba(18, 18, 24, 0.95)',
+    backgroundColor: 'rgba(18, 18, 24, 0.9)',
     paddingHorizontal: 24,
     paddingBottom: 18,
     borderBottomWidth: 1,
@@ -104,15 +104,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.4,
-    shadowRadius: 10,
-    elevation: 6,
+    elevation: 4,
   },
   brandIconSymbol: {
     fontSize: 22,
-    color: COLORS.background,
+    color: '#0a0a0d',
     fontWeight: '900',
   },
   titleContainer: {
@@ -135,7 +131,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: 'rgba(18, 18, 24, 0.8)',
+    backgroundColor: 'rgba(18, 18, 24, 0.95)',
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 24,
@@ -149,7 +145,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.statusConcluido,
   },
   statusBadgeText: {
-    color: COLORS.primaryLight,
+    color: '#fef3c7',
     fontSize: 11,
     fontWeight: '800',
     letterSpacing: 1,
