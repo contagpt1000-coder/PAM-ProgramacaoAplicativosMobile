@@ -11,7 +11,7 @@ const theme = {
   colors: {
     ...MD3DarkTheme.colors,
     primary: COLORS.primary,
-    background: COLORS.background,
+    background: 'transparent',
     surface: COLORS.cardBackground,
     error: COLORS.error,
   },
@@ -48,7 +48,7 @@ export default function App() {
         document.head.appendChild(iconStyle);
       }
 
-      // 3. Inject CSS Engine with Robust React Native Web Hover Selectors
+      // 3. Inject CSS Engine Overriding Inline Backgrounds and Activating Pointer Hover
       const styleId = 'web-scroll-fix';
       let style = document.getElementById(styleId) as HTMLStyleElement;
       if (!style) {
@@ -70,7 +70,7 @@ export default function App() {
           box-sizing: border-box !important;
         }
 
-        /* Continuous Subtle Gold Radial Background */
+        /* 100% VISIBLE RICH DARK GOLD RADIAL GRADIENT BACKGROUND */
         html, body {
           height: 100% !important;
           width: 100% !important;
@@ -79,18 +79,19 @@ export default function App() {
           margin: 0 !important;
           padding: 0 !important;
           background-color: #0a0a0d !important;
-          background-image: radial-gradient(circle at 50% -10%, rgba(245, 158, 11, 0.18) 0%, rgba(10, 10, 13, 1) 75%) !important;
+          background-image: 
+            radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.25) 0%, transparent 65%),
+            radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.15) 0%, transparent 45%),
+            radial-gradient(circle at 0% 50%, rgba(245, 158, 11, 0.12) 0%, transparent 50%) !important;
           background-attachment: fixed !important;
         }
 
+        /* OVERRIDE ALL INLINE SOLID BACKGROUNDS ON WRAPPER DIVS TO SHOW RADIAL GRADIENT */
         #root,
         #root > div,
-        #root > div > div {
-          min-height: 100% !important;
-          height: auto !important;
-          width: 100% !important;
-          position: relative !important;
-          overflow: visible !important;
+        #root > div > div,
+        #root div[style*="background-color: rgb(242, 242, 242)"],
+        #root div[style*="background-color: rgb(10, 10, 13)"] {
           background-color: transparent !important;
         }
 
@@ -110,36 +111,37 @@ export default function App() {
           background: #fbbf24 !important;
         }
 
-        /* HOVER ELEVATION & GLOW FOR ALL CARDS AND TOUCHABLES */
+        /* HOVER ANIMATION: ELEVATION -5px + GLOWING BRIGHT GOLD BORDER FOR ALL CLICKABLE CARDS */
+        div[style*="cursor: pointer"],
+        div[class*="r-cursor-1loqt21"],
         div[role="button"],
-        div[tabindex="0"],
-        div[class*="r-cursor-1loqt21"] {
+        button {
           transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
                       border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
-                      box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                      box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
                       background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
 
-        div[role="button"]:hover,
-        div[tabindex="0"]:hover,
-        div[class*="r-cursor-1loqt21"]:hover {
-          transform: translateY(-4px) scale(1.008) !important;
+        div[style*="cursor: pointer"]:hover,
+        div[class*="r-cursor-1loqt21"]:hover,
+        div[role="button"]:hover {
+          transform: translateY(-5px) scale(1.01) !important;
           border-color: #f59e0b !important;
-          box-shadow: 0 10px 24px rgba(245, 158, 11, 0.25) !important;
+          box-shadow: 0 12px 28px rgba(245, 158, 11, 0.35) !important;
         }
 
         /* Specific Hover Overrides for Concluir (Green) */
         div[aria-label="Marcar agendamento como concluído"]:hover {
           border-color: #10b981 !important;
-          box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3) !important;
-          background-color: rgba(16, 185, 129, 0.22) !important;
+          box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35) !important;
+          background-color: rgba(16, 185, 129, 0.25) !important;
         }
 
         /* Specific Hover Overrides for Cancelar (Red) */
         div[aria-label="Cancelar agendamento"]:hover {
           border-color: #ef4444 !important;
-          box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3) !important;
-          background-color: rgba(239, 68, 68, 0.22) !important;
+          box-shadow: 0 8px 20px rgba(239, 68, 68, 0.35) !important;
+          background-color: rgba(239, 68, 68, 0.25) !important;
         }
       `;
     }
