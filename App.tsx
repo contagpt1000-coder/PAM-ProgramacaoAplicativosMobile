@@ -48,7 +48,7 @@ export default function App() {
         document.head.appendChild(iconStyle);
       }
 
-      // 3. Inject Precise Dark Gold CSS Engine (Subtle Radial Background + Controlled Hover Glow)
+      // 3. Inject CSS Engine with Robust React Native Web Hover Selectors
       const styleId = 'web-scroll-fix';
       let style = document.getElementById(styleId) as HTMLStyleElement;
       if (!style) {
@@ -79,7 +79,7 @@ export default function App() {
           margin: 0 !important;
           padding: 0 !important;
           background-color: #0a0a0d !important;
-          background-image: radial-gradient(circle at 50% -10%, rgba(245, 158, 11, 0.16) 0%, rgba(10, 10, 13, 1) 75%) !important;
+          background-image: radial-gradient(circle at 50% -10%, rgba(245, 158, 11, 0.18) 0%, rgba(10, 10, 13, 1) 75%) !important;
           background-attachment: fixed !important;
         }
 
@@ -110,14 +110,36 @@ export default function App() {
           background: #fbbf24 !important;
         }
 
-        /* Smooth transitions for interactive items */
-        .card-hoverable {
-          transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease !important;
+        /* HOVER ELEVATION & GLOW FOR ALL CARDS AND TOUCHABLES */
+        div[role="button"],
+        div[tabindex="0"],
+        div[class*="r-cursor-1loqt21"] {
+          transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                      border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                      box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                      background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
-        .card-hoverable:hover {
-          transform: translateY(-3px) !important;
-          border-color: rgba(245, 158, 11, 0.7) !important;
-          box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2) !important;
+
+        div[role="button"]:hover,
+        div[tabindex="0"]:hover,
+        div[class*="r-cursor-1loqt21"]:hover {
+          transform: translateY(-4px) scale(1.008) !important;
+          border-color: #f59e0b !important;
+          box-shadow: 0 10px 24px rgba(245, 158, 11, 0.25) !important;
+        }
+
+        /* Specific Hover Overrides for Concluir (Green) */
+        div[aria-label="Marcar agendamento como concluído"]:hover {
+          border-color: #10b981 !important;
+          box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3) !important;
+          background-color: rgba(16, 185, 129, 0.22) !important;
+        }
+
+        /* Specific Hover Overrides for Cancelar (Red) */
+        div[aria-label="Cancelar agendamento"]:hover {
+          border-color: #ef4444 !important;
+          box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3) !important;
+          background-color: rgba(239, 68, 68, 0.22) !important;
         }
       `;
     }
