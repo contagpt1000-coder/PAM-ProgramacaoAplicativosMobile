@@ -64,6 +64,127 @@
       "hora": "16:00",
       "status": "cancelado",
       "observacoes": "Cliente solicitou cancelamento por imprevisto de trabalho."
+    },
+    {
+      "clienteNome": "dgaaaz",
+      "clienteTelefone": "(15) 76891-2356",
+      "servicoId": "1",
+      "profissionalId": "1",
+      "data": "2026-08-10",
+      "hora": "09:00",
+      "status": "cancelado",
+      "observacoes": "",
+      "id": "hV15oTq"
+    },
+    {
+      "clienteNome": "dgaaaz",
+      "clienteTelefone": "(15) 76891-2356",
+      "servicoId": "1",
+      "profissionalId": "1",
+      "data": "2026-08-10",
+      "hora": "09:00",
+      "status": "agendado",
+      "observacoes": "",
+      "id": "fxuxNti"
+    },
+    {
+      "clienteNome": "dgaaaz",
+      "clienteTelefone": "(15) 76891-2356",
+      "servicoId": "1",
+      "profissionalId": "1",
+      "data": "2026-08-10",
+      "hora": "09:00",
+      "status": "agendado",
+      "observacoes": "",
+      "id": "R806L1y"
+    },
+    {
+      "clienteNome": "dgaaaz",
+      "clienteTelefone": "(15) 76891-2356",
+      "servicoId": "1",
+      "profissionalId": "1",
+      "data": "2026-08-10",
+      "hora": "09:00",
+      "status": "agendado",
+      "observacoes": "",
+      "id": "OXHC6wM"
+    },
+    {
+      "clienteNome": "dgaaaz",
+      "clienteTelefone": "(15) 76891-2356",
+      "servicoId": "1",
+      "profissionalId": "1",
+      "data": "2026-08-10",
+      "hora": "09:00",
+      "status": "agendado",
+      "observacoes": "",
+      "id": "PRFUFn-"
+    },
+    {
+      "clienteNome": "dgaaaz",
+      "clienteTelefone": "(15) 76891-2356",
+      "servicoId": "1",
+      "profissionalId": "1",
+      "data": "2026-08-10",
+      "hora": "09:00",
+      "status": "agendado",
+      "observacoes": "",
+      "id": "BrSUMB0"
+    },
+    {
+      "clienteNome": "dgaaaz",
+      "clienteTelefone": "(15) 76891-2356",
+      "servicoId": "1",
+      "profissionalId": "2",
+      "data": "2026-08-10",
+      "hora": "09:00",
+      "status": "agendado",
+      "observacoes": "",
+      "id": "OxOBzqX"
+    },
+    {
+      "clienteNome": "dgaaaz",
+      "clienteTelefone": "(15) 76891-2356",
+      "servicoId": "1",
+      "profissionalId": "2",
+      "data": "2026-08-10",
+      "hora": "09:00",
+      "status": "agendado",
+      "observacoes": "",
+      "id": "XRYJg5n"
+    },
+    {
+      "clienteNome": "dgaaaz",
+      "clienteTelefone": "(15) 76891-2356",
+      "servicoId": "1",
+      "profissionalId": "2",
+      "data": "2026-08-10",
+      "hora": "09:00",
+      "status": "agendado",
+      "observacoes": "",
+      "id": "0SjRF_L"
+    },
+    {
+      "clienteNome": "dgaaaz",
+      "clienteTelefone": "(15) 76891-2356",
+      "servicoId": "1",
+      "profissionalId": "3",
+      "data": "2026-08-10",
+      "hora": "09:00",
+      "status": "cancelado",
+      "observacoes": "",
+      "id": "-T3y3SJ"
+    },
+    {
+      "clienteNome": "dgaaaz",
+      "clienteTelefone": "(15) 76891-2356",
+      "servicoId": "1",
+      "profissionalId": "3",
+      "data": "2026-08-10",
+      "hora": "09:00",
+      "status": "agendado",
+      "observacoes": "",
+      "id": "NYymvDb"
     }
   ]
 }

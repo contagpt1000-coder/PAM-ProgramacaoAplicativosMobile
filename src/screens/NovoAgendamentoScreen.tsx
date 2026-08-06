@@ -113,7 +113,7 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
       />
 
       <View style={styles.formWrapper}>
-        {/* PASSO 1: Seleção de Serviço - Grid Uniforme e Moderno */}
+        {/* PASSO 1: Seleção de Serviço */}
         <Text style={styles.sectionTitle}>1. SELECIONE O SERVIÇO</Text>
         <View style={styles.servicosGrid}>
           {servicos.map((s) => {
@@ -123,11 +123,13 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
                 key={s.id}
                 style={styles.servicoCardWrapper}
                 onPress={() => setSelectedServicoId(s.id)}
-                activeOpacity={0.8}
+                activeOpacity={0.85}
                 accessibilityRole="button"
                 accessibilityLabel={`Serviço ${s.nome}, valor ${formatCurrency(s.preco)}`}
               >
                 <Card style={[styles.servicoCard, isSelected && styles.selectedCard]}>
+                  {/* Top Metallic Accent Bar */}
+                  <View style={[styles.cardTopBar, isSelected && styles.cardTopBarSelected]} />
                   <Card.Content style={styles.cardContent}>
                     <View style={styles.cardTop}>
                       <Text style={styles.servicoNome} numberOfLines={2}>
@@ -140,7 +142,7 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
                     <View style={styles.servicoFooter}>
                       <Text style={styles.servicoPreco}>{formatCurrency(s.preco)}</Text>
                       <View style={styles.duracaoChip}>
-                        <Text style={styles.duracaoText}>{s.duracaoMinutos} min</Text>
+                        <Text style={styles.duracaoText}>⏱ {s.duracaoMinutos} min</Text>
                       </View>
                     </View>
                   </Card.Content>
@@ -160,7 +162,7 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
                 key={p.id}
                 style={[styles.profCard, isSelected && styles.selectedCard]}
                 onPress={() => setSelectedProfissionalId(p.id)}
-                activeOpacity={0.8}
+                activeOpacity={0.85}
                 accessibilityRole="button"
                 accessibilityLabel={`Profissional ${p.nome}`}
               >
@@ -232,6 +234,7 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
                 onPress={() => setHoraAgendamento(h)}
                 accessibilityRole="button"
                 accessibilityLabel={`Horário ${h}`}
+                activeOpacity={0.8}
               >
                 <Text style={[styles.horaText, isSelected && styles.horaTextSelected]}>
                   {h}
@@ -266,8 +269,8 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
             buttonColor={COLORS.primary}
             textColor={COLORS.background}
             style={styles.submitButton}
-            contentStyle={{ height: 54, justifyContent: 'center' }}
-            labelStyle={{ fontSize: 16, fontWeight: '800', letterSpacing: 1 }}
+            contentStyle={{ height: 56, justifyContent: 'center' }}
+            labelStyle={{ fontSize: 16, fontWeight: '900', letterSpacing: 1.5 }}
             accessibilityLabel="Confirmar e salvar agendamento"
           >
             CONFIRMAR AGENDAMENTO
@@ -281,7 +284,7 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    backgroundColor: COLORS.background,
+    backgroundColor: 'transparent',
   },
   formWrapper: {
     width: '100%',
@@ -290,12 +293,13 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
   },
   sectionTitle: {
-    fontSize: 12,
-    fontWeight: '800',
+    fontFamily: 'Cinzel, serif',
+    fontSize: 13,
+    fontWeight: '900',
     color: COLORS.primary,
-    letterSpacing: 1,
-    marginTop: 20,
-    marginBottom: 10,
+    letterSpacing: 1.5,
+    marginTop: 22,
+    marginBottom: 12,
   },
   servicosGrid: {
     flexDirection: 'row',
@@ -311,9 +315,18 @@ const styles = StyleSheet.create({
   servicoCard: {
     height: 175,
     backgroundColor: COLORS.cardBackground,
-    borderRadius: 14,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
+    overflow: 'hidden',
+  },
+  cardTopBar: {
+    height: 3,
+    width: '100%',
+    backgroundColor: 'transparent',
+  },
+  cardTopBarSelected: {
+    backgroundColor: COLORS.primary,
   },
   selectedCard: {
     borderColor: COLORS.primary,
@@ -346,20 +359,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: COLORS.cardBorder + '80',
+    borderTopColor: 'rgba(255, 255, 255, 0.06)',
     paddingTop: 10,
     marginTop: 8,
   },
   servicoPreco: {
     fontSize: 16,
-    fontWeight: '800',
+    fontWeight: '900',
     color: COLORS.primary,
   },
   duracaoChip: {
-    backgroundColor: COLORS.cardBorder,
+    backgroundColor: 'rgba(255, 255, 255, 0.06)',
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: COLORS.cardBorder,
   },
   duracaoText: {
     fontSize: 11,
@@ -375,17 +390,19 @@ const styles = StyleSheet.create({
   profCard: {
     flex: 1,
     backgroundColor: COLORS.cardBackground,
-    padding: 16,
-    borderRadius: 14,
+    padding: 18,
+    borderRadius: 16,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
   },
   avatar: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    marginBottom: 8,
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    marginBottom: 10,
+    borderWidth: 2,
+    borderColor: COLORS.cardBorderBright,
   },
   avatarPlaceholder: {
     backgroundColor: COLORS.cardBorder,
@@ -395,10 +412,10 @@ const styles = StyleSheet.create({
   avatarLetter: {
     color: COLORS.primary,
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   profNome: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '700',
     color: COLORS.textPrimary,
     textAlign: 'center',
@@ -418,6 +435,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.textSecondary,
     marginBottom: 8,
+    fontWeight: '600',
   },
   horariosGrid: {
     flexDirection: 'row',
@@ -428,9 +446,9 @@ const styles = StyleSheet.create({
   },
   horaChip: {
     backgroundColor: COLORS.cardBackground,
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     paddingVertical: 10,
-    borderRadius: 8,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
     minHeight: 44,
@@ -447,16 +465,16 @@ const styles = StyleSheet.create({
   },
   horaTextSelected: {
     color: COLORS.background,
-    fontWeight: '800',
+    fontWeight: '900',
   },
   submitContainer: {
-    marginTop: 24,
+    marginTop: 28,
     marginBottom: 40,
     width: '100%',
   },
   submitButton: {
-    borderRadius: 10,
-    elevation: 4,
+    borderRadius: 12,
+    elevation: 6,
     width: '100%',
   },
 });

@@ -20,17 +20,35 @@ const theme = {
 export default function App() {
   useEffect(() => {
     if (Platform.OS === 'web' && typeof document !== 'undefined') {
-      // Load Google Font 'Outfit'
-      const fontLinkId = 'google-font-outfit';
+      // 1. Inject Google Fonts ('Cinzel' & 'Plus Jakarta Sans')
+      const fontLinkId = 'google-font-barberflow-premium';
       if (!document.getElementById(fontLinkId)) {
         const link = document.createElement('link');
         link.id = fontLinkId;
         link.rel = 'stylesheet';
-        link.href = 'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700&display=swap';
+        link.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap';
         document.head.appendChild(link);
       }
 
-      // Inject Global Dark Gold Glassmorphism CSS
+      // 2. Inject Vector Icons Font-Face to ensure icons NEVER render as missing boxes
+      const iconStyleId = 'expo-vector-icons-fontface';
+      if (!document.getElementById(iconStyleId)) {
+        const iconStyle = document.createElement('style');
+        iconStyle.id = iconStyleId;
+        iconStyle.innerHTML = `
+          @font-face {
+            font-family: 'MaterialCommunityIcons';
+            src: url('https://cdn.jsdelivr.net/npm/@expo/vector-icons@14.0.0/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf') format('truetype');
+          }
+          @font-face {
+            font-family: 'Material Icons';
+            src: url('https://cdn.jsdelivr.net/npm/@expo/vector-icons@14.0.0/build/vendor/react-native-vector-icons/Fonts/MaterialIcons.ttf') format('truetype');
+          }
+        `;
+        document.head.appendChild(iconStyle);
+      }
+
+      // 3. Inject Global Dark Gold Premium Plus Glassmorphism CSS Engine
       const styleId = 'web-scroll-fix';
       let style = document.getElementById(styleId) as HTMLStyleElement;
       if (!style) {
@@ -39,12 +57,22 @@ export default function App() {
         document.head.appendChild(style);
       }
       style.innerHTML = `
+        :root {
+          --bg-dark: #0a0a0d;
+          --bg-card: rgba(18, 18, 24, 0.85);
+          --border-gold: rgba(212, 175, 55, 0.28);
+          --border-gold-bright: rgba(245, 158, 11, 0.65);
+          --gold-primary: #f59e0b;
+          --gold-metallic: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #b45309 100%);
+          --gold-gradient-text: linear-gradient(135deg, #fffbeb 0%, #f59e0b 50%, #d97706 100%);
+        }
+
         * {
-          font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+          font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
           box-sizing: border-box !important;
         }
 
-        /* Native browser scrolling exactly like port 3000 */
+        /* Full Window Background with Subtle Radial Gold Glow */
         html, body {
           height: 100% !important;
           width: 100% !important;
@@ -52,12 +80,14 @@ export default function App() {
           overflow-x: hidden !important;
           margin: 0 !important;
           padding: 0 !important;
-          background-color: #0c0c0e !important;
-          background-image: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.08) 0%, rgba(12, 12, 14, 0.95) 70%) !important;
+          background-color: #0a0a0d !important;
+          background-image: 
+            radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.12) 0%, transparent 65%),
+            radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.05) 0%, transparent 45%) !important;
           background-attachment: fixed !important;
         }
 
-        /* Target ONLY top-level React Navigation stack containers */
+        /* Native Browser Container Override */
         #root,
         #root > div,
         #root > div > div {
@@ -69,33 +99,44 @@ export default function App() {
           background-color: transparent !important;
         }
 
-        /* Standard native browser scrollbar */
+        /* Clean Native Browser Scrollbar */
         ::-webkit-scrollbar {
           width: 12px !important;
         }
         ::-webkit-scrollbar-track {
-          background: #09090b !important;
+          background: #0a0a0d !important;
         }
         ::-webkit-scrollbar-thumb {
           background: #d97706 !important;
           border-radius: 6px !important;
-          border: 2px solid #09090b !important;
+          border: 2px solid #0a0a0d !important;
         }
         ::-webkit-scrollbar-thumb:hover {
           background: #fbbf24 !important;
         }
 
-        /* Glassmorphism Cards & Micro-animations */
-        div[class*="r-borderRadius"], 
-        div[class*="r-backgroundColor"] {
-          transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        /* Typography Heading Utility Classes */
+        .cinzel-text {
+          font-family: 'Cinzel', serif !important;
         }
 
-        /* Interactive Hover Glows on clickable cards */
+        .gold-gradient-text {
+          background: linear-gradient(135deg, #fffbeb 0%, #f59e0b 50%, #d97706 100%) !important;
+          -webkit-background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+        }
+
+        /* Card Hover Effects */
         div[role="button"]:hover,
         button:hover {
-          transform: translateY(-2px) !important;
-          box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.25), 0 8px 10px -6px rgba(245, 158, 11, 0.2) !important;
+          transition: all 0.25s ease !important;
+        }
+
+        /* Pulse animation for status dots */
+        @keyframes pulse-gold {
+          0% { transform: scale(0.95); opacity: 0.8; }
+          50% { transform: scale(1.15); opacity: 1; }
+          100% { transform: scale(0.95); opacity: 0.8; }
         }
       `;
     }
