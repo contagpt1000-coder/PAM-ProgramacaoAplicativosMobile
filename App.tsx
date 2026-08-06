@@ -30,7 +30,7 @@ export default function App() {
         document.head.appendChild(link);
       }
 
-      // 2. Inject Vector Icons Font-Face to ensure icons NEVER render as missing boxes
+      // 2. Inject Vector Icons Font-Face
       const iconStyleId = 'expo-vector-icons-fontface';
       if (!document.getElementById(iconStyleId)) {
         const iconStyle = document.createElement('style');
@@ -48,7 +48,7 @@ export default function App() {
         document.head.appendChild(iconStyle);
       }
 
-      // 3. Inject Global Dark Gold Premium Plus Glassmorphism CSS Engine
+      // 3. Inject Rich Dark Gold Radial Gradient Background & Hover Animations CSS Engine
       const styleId = 'web-scroll-fix';
       let style = document.getElementById(styleId) as HTMLStyleElement;
       if (!style) {
@@ -59,12 +59,10 @@ export default function App() {
       style.innerHTML = `
         :root {
           --bg-dark: #0a0a0d;
-          --bg-card: rgba(18, 18, 24, 0.85);
+          --bg-card: rgba(18, 18, 24, 0.88);
           --border-gold: rgba(212, 175, 55, 0.28);
           --border-gold-bright: rgba(245, 158, 11, 0.65);
           --gold-primary: #f59e0b;
-          --gold-metallic: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #b45309 100%);
-          --gold-gradient-text: linear-gradient(135deg, #fffbeb 0%, #f59e0b 50%, #d97706 100%);
         }
 
         * {
@@ -72,7 +70,7 @@ export default function App() {
           box-sizing: border-box !important;
         }
 
-        /* Full Window Background with Subtle Radial Gold Glow */
+        /* 100% VISIBLE RICH DARK GOLD RADIAL GRADIENT BACKGROUND */
         html, body {
           height: 100% !important;
           width: 100% !important;
@@ -82,24 +80,27 @@ export default function App() {
           padding: 0 !important;
           background-color: #0a0a0d !important;
           background-image: 
-            radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.12) 0%, transparent 65%),
-            radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.05) 0%, transparent 45%) !important;
+            radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.22) 0%, transparent 65%),
+            radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.15) 0%, transparent 45%),
+            radial-gradient(circle at 0% 50%, rgba(245, 158, 11, 0.12) 0%, transparent 50%) !important;
           background-attachment: fixed !important;
         }
 
-        /* Native Browser Container Override */
+        /* Force transparent containers so the body radial gradient is 100% visible */
         #root,
         #root > div,
-        #root > div > div {
-          min-height: 100% !important;
-          height: auto !important;
-          width: 100% !important;
-          position: relative !important;
-          overflow: visible !important;
+        #root > div > div,
+        div[class*="r-backgroundColor"] {
           background-color: transparent !important;
         }
 
-        /* Clean Native Browser Scrollbar */
+        /* Re-apply dark glass background ONLY on cards and inputs */
+        div[class*="r-borderRadius"] {
+          background-color: rgba(18, 18, 24, 0.92) !important;
+          backdrop-filter: blur(12px) !important;
+        }
+
+        /* Native Browser Scrollbar */
         ::-webkit-scrollbar {
           width: 12px !important;
         }
@@ -115,28 +116,23 @@ export default function App() {
           background: #fbbf24 !important;
         }
 
-        /* Typography Heading Utility Classes */
-        .cinzel-text {
-          font-family: 'Cinzel', serif !important;
+        /* HOVER MICRO-ANIMATION & BRIGHT GOLD BORDER GLOW */
+        div[role="button"],
+        button,
+        div[class*="r-borderRadius"] {
+          transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
+                      border-color 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
+                      box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
+                      background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
 
-        .gold-gradient-text {
-          background: linear-gradient(135deg, #fffbeb 0%, #f59e0b 50%, #d97706 100%) !important;
-          -webkit-background-clip: text !important;
-          -webkit-text-fill-color: transparent !important;
-        }
-
-        /* Card Hover Effects */
         div[role="button"]:hover,
-        button:hover {
-          transition: all 0.25s ease !important;
-        }
-
-        /* Pulse animation for status dots */
-        @keyframes pulse-gold {
-          0% { transform: scale(0.95); opacity: 0.8; }
-          50% { transform: scale(1.15); opacity: 1; }
-          100% { transform: scale(0.95); opacity: 0.8; }
+        button:hover,
+        div[class*="r-borderRadius"]:hover {
+          transform: translateY(-4px) scale(1.008) !important;
+          border-color: #f59e0b !important;
+          box-shadow: 0 14px 32px rgba(245, 158, 11, 0.35), inset 0 0 15px rgba(251, 191, 36, 0.15) !important;
+          background-color: #181824 !important;
         }
       `;
     }
