@@ -196,6 +196,17 @@
       "status": "agendado",
       "observacoes": "",
       "id": "cwn-mtk"
+    },
+    {
+      "clienteNome": "ars",
+      "clienteTelefone": "(15) 98817-8027",
+      "servicoId": "2",
+      "profissionalId": "2",
+      "data": "2026-08-19",
+      "hora": "09:00",
+      "status": "agendado",
+      "observacoes": "",
+      "id": "YuP9fm4"
     }
   ]
 }
