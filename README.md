@@ -64,11 +64,11 @@ PAM-ProgramacaoAplicativosMobile/
 
 ---
 
-## 🚀 Como Executar o Projeto Passo a Passo
+## 🚀 Como Executar o Projeto Passo a Passo (Compatibilidade Universal)
 
 ### Pré-requisitos
 - [Node.js](https://nodejs.org/) (v18 ou superior)
-- Navegador Web (Chrome/Edge) ou o aplicativo **Expo Go** no celular.
+- Navegador Web (Chrome, Edge, Firefox) ou o aplicativo **Expo Go** no celular.
 
 ---
 
@@ -80,32 +80,33 @@ npm install --legacy-peer-deps
 
 ---
 
-### Passo 2: Executar o Servidor Backend Mock (`json-server`)
+### Passo 2: Executar Tudo com 1 Único Comando (Recomendado)
 
-Abra um terminal na pasta do projeto e inicie o `json-server`:
+Inicia automaticamente o servidor Backend REST (porta 3000) e a aplicação Expo Web (porta 8081) simultaneamente:
 
 ```bash
-npm run api
+npm run dev
 ```
 
-> 🟢 **Backend Ativo:** O servidor iniciará na porta `3000`:
-> - API de Agendamentos: `http://localhost:3000/agendamentos`
-> - API de Serviços: `http://localhost:3000/servicos`
-> - API de Profissionais: `http://localhost:3000/profissionais`
+> 🌐 **Acesso Imediato no Navegador:** Abra [http://localhost:8081](http://localhost:8081).
+> 
+> 🛡️ **Camada de Resiliência e Fallback Automático:** O sistema possui detecção dinâmica de IP e contingência offline integrada. Mesmo se você executar apenas `npm start` sem o backend ativo, ou se a rede da sua escola bloquear portas locais, a aplicação **funciona 100% perfeitamente com todas as operações CRUD ativas**!
 
 ---
 
-### Passo 3: Executar a Aplicação Mobile (Expo)
+### Alternativa: Execução em Terminais Separados
 
-Em outro terminal na mesma pasta:
+Se preferir rodar os serviços individualmente:
 
-```bash
-npm start
-```
-
-#### Como visualizar o App:
-- **No Navegador Web:** Pressione a tecla **`w`** no terminal. O navegador abrirá automaticamente em **`http://localhost:8081`**.
-- **No Celular Físico via Expo Go:** Escaneie o **QR Code** exibido no terminal utilizando o app **Expo Go** no celular.
+1. **Terminal 1 (Backend REST Mock):**
+   ```bash
+   npm run api
+   ```
+2. **Terminal 2 (App Mobile/Web Expo):**
+   ```bash
+   npm start
+   # Pressione 'w' no terminal para abrir no navegador web
+   ```
 
 ---
 
