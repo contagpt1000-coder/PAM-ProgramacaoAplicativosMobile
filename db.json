@@ -127,7 +127,7 @@
       "profissionalId": "1",
       "data": "2026-08-10",
       "hora": "09:00",
-      "status": "agendado",
+      "status": "cancelado",
       "observacoes": "",
       "id": "BrSUMB0"
     },
@@ -185,6 +185,17 @@
       "status": "agendado",
       "observacoes": "",
       "id": "NYymvDb"
+    },
+    {
+      "clienteNome": "Lucas Gabriel",
+      "clienteTelefone": "(11) 98765-4321",
+      "servicoId": "1",
+      "profissionalId": "1",
+      "data": "2026-08-19",
+      "hora": "10:00",
+      "status": "agendado",
+      "observacoes": "",
+      "id": "cwn-mtk"
     }
   ]
 }

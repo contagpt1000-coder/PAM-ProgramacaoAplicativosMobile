@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   Alert,
   Image,
+  Platform,
 } from 'react-native';
-import { TextInput, Button, Card } from 'react-native-paper';
+import { TextInput, Button, Card, Portal, Dialog } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Header } from '../components/Header';
 import { LoadingSpinner } from '../components/LoadingSpinner';
@@ -24,6 +25,18 @@ const HORARIOS_DISPONIVEIS = [
   '08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'
 ];
 
+// Calcula a data inicial válida dinamicamente (hoje ou amanhã se for após o expediente)
+const getDefaultDate = (): string => {
+  const now = new Date();
+  if (now.getHours() >= 18) {
+    now.setDate(now.getDate() + 1);
+  }
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+};
+
 export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ navigation }) => {
   const [servicos, setServicos] = useState<Servico[]>([]);
   const [profissionais, setProfissionais] = useState<Profissional[]>([]);
@@ -35,9 +48,13 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
   const [selectedProfissionalId, setSelectedProfissionalId] = useState<string>('');
   const [clienteNome, setClienteNome] = useState<string>('');
   const [clienteTelefone, setClienteTelefone] = useState<string>('');
-  const [dataAgendamento, setDataAgendamento] = useState<string>('2026-08-10');
-  const [horaAgendamento, setHoraAgendamento] = useState<string>('');
+  const [dataAgendamento, setDataAgendamento] = useState<string>(getDefaultDate());
+  const [horaAgendamento, setHoraAgendamento] = useState<string>('09:00');
   const [observacoes, setObservacoes] = useState<string>('');
+
+  // Feedback State
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successModalVisible, setSuccessModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     const loadAuxiliaryData = async () => {
@@ -50,7 +67,7 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
         setServicos(servicosData);
         setProfissionais(profissionaisData);
       } catch (error) {
-        Alert.alert('Erro', 'Não foi possível carregar serviços e profissionais.');
+        setErrorMessage('Não foi possível carregar serviços e profissionais.');
       } finally {
         setLoading(false);
       }
@@ -60,9 +77,12 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
 
   const handlePhoneChange = (text: string) => {
     setClienteTelefone(formatPhone(text));
+    if (errorMessage) setErrorMessage(null);
   };
 
   const handleSubmit = async () => {
+    setErrorMessage(null);
+
     const formData = {
       clienteNome,
       clienteTelefone,
@@ -74,7 +94,10 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
 
     const errors = validateAgendamentoForm(formData);
     if (errors.length > 0) {
-      Alert.alert('Validação de Dados', errors[0].message);
+      setErrorMessage(errors[0].message);
+      if (Platform.OS === 'web' && typeof window !== 'undefined') {
+        window.scrollTo({ top: 300, behavior: 'smooth' });
+      }
       return;
     }
 
@@ -86,17 +109,19 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
         observacoes,
       });
 
-      Alert.alert('Sucesso', 'Agendamento cadastrado com sucesso!', [
-        {
-          text: 'OK',
-          onPress: () => navigation.goBack(),
-        },
-      ]);
-    } catch (error) {
-      Alert.alert('Erro HTTP', 'Não foi possível criar o agendamento.');
+      // Exibe modal de sucesso com feedback visual imediato
+      setSuccessModalVisible(true);
+    } catch (error: any) {
+      console.error('[NovoAgendamento] Falha ao cadastrar:', error);
+      setErrorMessage('Não foi possível salvar o agendamento no banco de dados.');
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleSuccessClose = () => {
+    setSuccessModalVisible(false);
+    navigation.navigate('Home');
   };
 
   if (loading) {
@@ -113,6 +138,14 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
       />
 
       <View style={styles.formWrapper}>
+        {/* Banner de Erro de Validação Visível */}
+        {errorMessage && (
+          <View style={styles.errorBanner}>
+            <Text style={styles.errorBannerIcon}>⚠️</Text>
+            <Text style={styles.errorBannerText}>{errorMessage}</Text>
+          </View>
+        )}
+
         {/* PASSO 1: Seleção de Serviço */}
         <Text style={styles.sectionTitle}>1. SELECIONE O SERVIÇO</Text>
         <View style={styles.servicosGrid}>
@@ -122,13 +155,15 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
               <TouchableOpacity
                 key={s.id}
                 style={styles.servicoCardWrapper}
-                onPress={() => setSelectedServicoId(s.id)}
+                onPress={() => {
+                  setSelectedServicoId(s.id);
+                  if (errorMessage) setErrorMessage(null);
+                }}
                 activeOpacity={0.85}
                 accessibilityRole="button"
                 accessibilityLabel={`Serviço ${s.nome}, valor ${formatCurrency(s.preco)}`}
               >
                 <Card style={[styles.servicoCard, isSelected && styles.selectedCard]}>
-                  {/* Top Metallic Accent Bar */}
                   <View style={[styles.cardTopBar, isSelected && styles.cardTopBarSelected]} />
                   <Card.Content style={styles.cardContent}>
                     <View style={styles.cardTop}>
@@ -161,7 +196,10 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
               <TouchableOpacity
                 key={p.id}
                 style={[styles.profCard, isSelected && styles.selectedCard]}
-                onPress={() => setSelectedProfissionalId(p.id)}
+                onPress={() => {
+                  setSelectedProfissionalId(p.id);
+                  if (errorMessage) setErrorMessage(null);
+                }}
                 activeOpacity={0.85}
                 accessibilityRole="button"
                 accessibilityLabel={`Profissional ${p.nome}`}
@@ -186,7 +224,10 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
           label="Nome Completo do Cliente *"
           mode="outlined"
           value={clienteNome}
-          onChangeText={setClienteNome}
+          onChangeText={(val) => {
+            setClienteNome(val);
+            if (errorMessage) setErrorMessage(null);
+          }}
           textColor={COLORS.textPrimary}
           outlineColor={COLORS.cardBorder}
           activeOutlineColor={COLORS.primary}
@@ -214,7 +255,10 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
           label="Data do Agendamento (AAAA-MM-DD) *"
           mode="outlined"
           value={dataAgendamento}
-          onChangeText={setDataAgendamento}
+          onChangeText={(val) => {
+            setDataAgendamento(val);
+            if (errorMessage) setErrorMessage(null);
+          }}
           keyboardType="numeric"
           maxLength={10}
           textColor={COLORS.textPrimary}
@@ -231,7 +275,10 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
               <TouchableOpacity
                 key={h}
                 style={[styles.horaChip, isSelected && styles.horaChipSelected]}
-                onPress={() => setHoraAgendamento(h)}
+                onPress={() => {
+                  setHoraAgendamento(h);
+                  if (errorMessage) setErrorMessage(null);
+                }}
                 accessibilityRole="button"
                 accessibilityLabel={`Horário ${h}`}
                 activeOpacity={0.8}
@@ -277,6 +324,35 @@ export const NovoAgendamentoScreen: React.FC<NovoAgendamentoScreenProps> = ({ na
           </Button>
         </View>
       </View>
+
+      {/* Modal Visual de Sucesso */}
+      <Portal>
+        <Dialog
+          visible={successModalVisible}
+          onDismiss={handleSuccessClose}
+          style={styles.successDialog}
+        >
+          <Dialog.Title style={styles.successDialogTitle}>
+            ✂ AGENDAMENTO CONFIRMADO!
+          </Dialog.Title>
+          <Dialog.Content>
+            <Text style={styles.successDialogMessage}>
+              O agendamento de <Text style={{ color: COLORS.primary, fontWeight: '700' }}>{clienteNome}</Text> foi registrado com sucesso no banco de dados para o dia {dataAgendamento} às {horaAgendamento}.
+            </Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button
+              mode="contained"
+              onPress={handleSuccessClose}
+              buttonColor={COLORS.primary}
+              textColor={COLORS.background}
+              labelStyle={{ fontWeight: '800' }}
+            >
+              VER AGENDAMENTOS
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 };
@@ -291,6 +367,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 12,
     paddingBottom: 80,
+  },
+  errorBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(239, 68, 68, 0.15)',
+    borderWidth: 1,
+    borderColor: '#ef4444',
+    padding: 14,
+    borderRadius: 12,
+    marginTop: 10,
+    marginBottom: 16,
+    gap: 10,
+  },
+  errorBannerIcon: {
+    fontSize: 18,
+  },
+  errorBannerText: {
+    color: '#fca5a5',
+    fontSize: 14,
+    fontWeight: '700',
+    flex: 1,
   },
   sectionTitle: {
     fontFamily: 'Cinzel, serif',
@@ -476,5 +573,22 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     elevation: 6,
     width: '100%',
+  },
+  successDialog: {
+    backgroundColor: '#121218',
+    borderWidth: 1,
+    borderColor: COLORS.cardBorderBright,
+    borderRadius: 16,
+  },
+  successDialogTitle: {
+    fontFamily: 'Cinzel, serif',
+    color: COLORS.primary,
+    fontSize: 18,
+    fontWeight: '800',
+  },
+  successDialogMessage: {
+    color: COLORS.textPrimary,
+    fontSize: 14,
+    lineHeight: 22,
   },
 });
