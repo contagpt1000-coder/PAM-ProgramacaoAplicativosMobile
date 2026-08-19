@@ -41,7 +41,12 @@ export const agendamentoService = {
       );
       if (existing) return existing;
 
+      // Gera ID sequencial numérico para clientes
+      const numericIds = clientes.map((c) => parseInt(String(c.id), 10)).filter((n) => !isNaN(n) && n > 0);
+      const nextClienteId = String((numericIds.length > 0 ? Math.max(...numericIds) : 0) + 1);
+
       const newClienteRes = await api.post<Cliente>('/clientes', {
+        id: nextClienteId,
         nome: nome.trim(),
         telefone: telefone.trim(),
         email: `${nome.toLowerCase().replace(/\s+/g, '.')}@email.com`,
@@ -76,6 +81,20 @@ export const agendamentoService = {
       return response.data;
     } catch (error) {
       return await mockFallbackStore.getProfissionais();
+    }
+  },
+
+  // Calcula o próximo ID sequencial padronizado (#105, #106, #107...)
+  async getNextAgendamentoId(): Promise<string> {
+    try {
+      const agList = await this.getAgendamentos();
+      const numericIds = agList
+        .map((a) => parseInt(String(a.id), 10))
+        .filter((n) => !isNaN(n) && n >= 100);
+      const max = numericIds.length > 0 ? Math.max(...numericIds) : 100;
+      return String(max + 1);
+    } catch {
+      return String(Date.now()).slice(-4);
     }
   },
 
@@ -172,8 +191,13 @@ export const agendamentoService = {
   // POST /agendamentos
   async createAgendamento(data: CriarAgendamentoDTO): Promise<Agendamento> {
     try {
-      const cliente = await this.findOrCreateCliente(data.clienteNome, data.clienteTelefone);
+      const [cliente, nextId] = await Promise.all([
+        this.findOrCreateCliente(data.clienteNome, data.clienteTelefone),
+        this.getNextAgendamentoId(),
+      ]);
+
       const payload: Partial<Agendamento> = {
+        id: nextId,
         clienteId: cliente.id,
         clienteNome: cliente.nome,
         clienteTelefone: cliente.telefone,

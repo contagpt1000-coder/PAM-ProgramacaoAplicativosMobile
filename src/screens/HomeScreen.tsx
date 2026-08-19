@@ -25,6 +25,8 @@ type HomeScreenProps = StackScreenProps<RootStackParamList, 'Home'>;
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const [agendamentos, setAgendamentos] = useState<AgendamentoComDetalhes[]>([]);
+  const [clientesCount, setClientesCount] = useState<number>(0);
+  const [servicosCount, setServicosCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -32,11 +34,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const [dateFilter, setDateFilter] = useState<string>('');
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
 
-  const fetchAgendamentos = async () => {
+  const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const data = await agendamentoService.getAgendamentos(statusFilter, dateFilter);
-      setAgendamentos(data);
+      const [agData, clData, svData] = await Promise.all([
+        agendamentoService.getAgendamentos(statusFilter, dateFilter),
+        agendamentoService.getClientes(),
+        agendamentoService.getServicos(),
+      ]);
+      setAgendamentos(agData);
+      setClientesCount(clData.length);
+      setServicosCount(svData.length);
     } catch (error) {
       Alert.alert('Erro HTTP', 'Não foi possível carregar os agendamentos. Verifique se o json-server está rodando.');
     } finally {
@@ -47,31 +55,36 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAgendamentos();
+      fetchDashboardData();
     }, [statusFilter, dateFilter])
   );
 
   const onRefresh = () => {
     setRefreshing(true);
-    fetchAgendamentos();
+    fetchDashboardData();
   };
 
   const handleStatusChange = async (id: string, newStatus: StatusAgendamento) => {
     try {
       await agendamentoService.updateAgendamento(id, { status: newStatus });
       Alert.alert('Sucesso', `Status do agendamento alterado para ${newStatus.toUpperCase()}`);
-      fetchAgendamentos();
+      fetchDashboardData();
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível atualizar o status.');
     }
   };
 
   const filteredAgendamentos = agendamentos.filter((ag) => {
-    const matchesSearch =
-      ag.clienteNome.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ag.servico?.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ag.profissional?.nome.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch;
+    const nome = ag.cliente?.nome || ag.clienteNome || '';
+    const serv = ag.servico?.nome || '';
+    const prof = ag.profissional?.nome || '';
+    const query = searchQuery.toLowerCase();
+
+    return (
+      nome.toLowerCase().includes(query) ||
+      serv.toLowerCase().includes(query) ||
+      prof.toLowerCase().includes(query)
+    );
   });
 
   const totalCount = agendamentos.length;
@@ -86,7 +99,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     <View style={styles.container}>
       <Header />
 
-      {/* Métricas / Dashboard Resumo em Dark Gold Glassmorphism */}
+      {/* 5 Cards de Métricas / Dashboard Resumo em Dark Gold Glassmorphism */}
       <View style={styles.metricsRow}>
         <View style={styles.metricCard}>
           <View style={styles.metricTopAccent} />
@@ -107,6 +120,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           <Text style={styles.metricLabel}>CONCLUÍDOS</Text>
           <Text style={[styles.metricNumber, { color: COLORS.statusConcluido }]}>
             {concluidosCount}
+          </Text>
+        </View>
+
+        <View style={styles.metricCard}>
+          <View style={[styles.metricTopAccent, { backgroundColor: '#38bdf8' }]} />
+          <Text style={styles.metricLabel}>CLIENTES</Text>
+          <Text style={[styles.metricNumber, { color: '#38bdf8' }]}>
+            {clientesCount}
+          </Text>
+        </View>
+
+        <View style={styles.metricCard}>
+          <View style={[styles.metricTopAccent, { backgroundColor: '#a855f7' }]} />
+          <Text style={styles.metricLabel}>SERVIÇOS</Text>
+          <Text style={[styles.metricNumber, { color: '#c084fc' }]}>
+            {servicosCount}
           </Text>
         </View>
       </View>
@@ -138,62 +167,46 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       </View>
 
       {/* Lista Principal de Agendamentos */}
-      <FlatList
-        data={filteredAgendamentos}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <AgendamentoCard
-            agendamento={item}
-            onPress={(id) => navigation.navigate('DetalhesAgendamento', { id })}
-            onStatusChange={handleStatusChange}
-          />
-        )}
-        scrollEnabled={Platform.OS !== 'web'}
-        contentContainerStyle={styles.listContent}
-        initialNumToRender={10}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        removeClippedSubviews={true}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor={COLORS.primary}
-            colors={[COLORS.primary]}
-          />
-        }
-        ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyTitle}>NENHUM AGENDAMENTO ENCONTRADO</Text>
-            <Text style={styles.emptySubtitle}>
-              Toque no botão "+" para criar um novo agendamento no sistema.
+      <View style={styles.listContainer}>
+        {filteredAgendamentos.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyIcon}>📅</Text>
+            <Text style={styles.emptyText}>Nenhum agendamento encontrado.</Text>
+            <Text style={styles.emptySubText}>
+              Clique em "+ NOVO AGENDAMENTO" para cadastrar o primeiro cliente.
             </Text>
           </View>
-        }
-      />
+        ) : (
+          filteredAgendamentos.map((item) => (
+            <AgendamentoCard
+              key={item.id}
+              agendamento={item}
+              onPress={(id) => navigation.navigate('DetalhesAgendamento', { id })}
+              onStatusChange={handleStatusChange}
+            />
+          ))
+        )}
+      </View>
 
-      {/* FAB Estilizado em Dourado Metálico Glow */}
+      {/* Botão Flutuante (FAB) Dourado Reluzente */}
       <TouchableOpacity
-        style={styles.fabButton}
+        style={styles.fab}
         onPress={() => navigation.navigate('NovoAgendamento')}
+        activeOpacity={0.88}
         accessibilityRole="button"
         accessibilityLabel="Novo agendamento"
-        activeOpacity={0.85}
       >
-        <Text style={styles.fabIcon}>＋</Text>
-        <Text style={styles.fabText}>NOVO AGENDAMENTO</Text>
+        <Text style={styles.fabIcon}>+</Text>
+        <Text style={styles.fabLabel}>NOVO AGENDAMENTO</Text>
       </TouchableOpacity>
 
-      {/* Modal de Filtro */}
       <FilterModal
         visible={isFilterModalOpen}
-        currentStatus={statusFilter}
-        currentDate={dateFilter}
-        onDismiss={() => setIsFilterModalOpen(false)}
-        onApplyFilters={(status, date) => {
-          setStatusFilter(status);
-          setDateFilter(date);
-        }}
+        onClose={() => setIsFilterModalOpen(false)}
+        selectedStatus={statusFilter}
+        onSelectStatus={setStatusFilter}
+        selectedDate={dateFilter}
+        onSelectDate={setDateFilter}
       />
     </View>
   );
@@ -202,24 +215,24 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    minHeight: '100%',
+    position: 'relative',
     backgroundColor: 'transparent',
+    paddingBottom: 100,
   },
   metricsRow: {
     flexDirection: 'row',
     paddingHorizontal: 24,
     paddingTop: 20,
-    paddingBottom: 10,
-    gap: 16,
-    width: '100%',
+    paddingBottom: 14,
+    gap: 12,
+    flexWrap: 'wrap',
   },
   metricCard: {
     flex: 1,
-    backgroundColor: COLORS.cardBackground,
-    paddingVertical: 16,
-    paddingHorizontal: 16,
+    minWidth: 140,
+    backgroundColor: 'rgba(18, 18, 24, 0.9)',
     borderRadius: 16,
-    alignItems: 'center',
+    padding: 16,
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
     position: 'relative',
@@ -234,118 +247,111 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
   },
   metricLabel: {
-    fontSize: 11,
+    fontFamily: 'Cinzel, serif',
+    fontSize: 10,
     fontWeight: '800',
     color: COLORS.textSecondary,
     letterSpacing: 1.2,
   },
   metricNumber: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: '900',
     color: COLORS.textPrimary,
-    marginTop: 4,
+    marginTop: 6,
   },
   searchRow: {
     flexDirection: 'row',
     paddingHorizontal: 24,
-    marginVertical: 14,
-    gap: 14,
+    marginBottom: 16,
+    gap: 12,
     alignItems: 'center',
-    width: '100%',
   },
   searchContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.cardBackground,
+    backgroundColor: 'rgba(18, 18, 24, 0.9)',
     borderRadius: 12,
-    height: 50,
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
     paddingHorizontal: 14,
+    height: 48,
   },
   searchIcon: {
-    fontSize: 16,
+    fontSize: 15,
     marginRight: 10,
   },
   searchInput: {
     flex: 1,
     color: COLORS.textPrimary,
-    fontSize: 14,
+    fontSize: 13,
     height: '100%',
+    padding: 0,
   },
   filterButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    backgroundColor: COLORS.cardBackground,
-    paddingHorizontal: 20,
-    height: 50,
+    gap: 6,
+    backgroundColor: 'rgba(18, 18, 24, 0.9)',
+    paddingHorizontal: 16,
+    height: 48,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: COLORS.primary,
-  },
-  filterIcon: {
-    fontSize: 14,
-  },
-  filterButtonText: {
-    color: COLORS.primary,
-    fontSize: 13,
-    fontWeight: '800',
-    letterSpacing: 0.5,
-  },
-  listContent: {
-    paddingHorizontal: 24,
-    paddingBottom: 110,
-    width: '100%',
-  },
-  emptyState: {
-    padding: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 40,
-    backgroundColor: COLORS.cardBackground,
-    borderRadius: 16,
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
   },
-  emptyTitle: {
-    fontSize: 14,
-    fontWeight: '900',
-    color: COLORS.primary,
-    letterSpacing: 1.2,
-    marginBottom: 6,
+  filterIcon: {
+    fontSize: 15,
   },
-  emptySubtitle: {
+  filterButtonText: {
+    color: COLORS.textPrimary,
+    fontWeight: '700',
+    fontSize: 13,
+  },
+  listContainer: {
+    paddingHorizontal: 24,
+    paddingBottom: 40,
+  },
+  emptyContainer: {
+    paddingVertical: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyIcon: {
+    fontSize: 48,
+    marginBottom: 12,
+  },
+  emptyText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+  },
+  emptySubText: {
     fontSize: 13,
     color: COLORS.textSecondary,
+    marginTop: 6,
     textAlign: 'center',
   },
-  fabButton: {
+  fab: {
     position: Platform.OS === 'web' ? ('fixed' as any) : 'absolute',
-    right: 28,
-    bottom: 28,
+    bottom: 24,
+    right: 24,
+    backgroundColor: COLORS.primary,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: COLORS.primary,
-    paddingHorizontal: 22,
     paddingVertical: 14,
+    paddingHorizontal: 22,
     borderRadius: 30,
     elevation: 8,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.45,
-    shadowRadius: 16,
-    zIndex: 9999,
+    zIndex: 999,
   },
   fabIcon: {
-    fontSize: 18,
+    fontSize: 20,
+    color: '#0a0a0d',
     fontWeight: '900',
-    color: COLORS.background,
   },
-  fabText: {
-    color: COLORS.background,
+  fabLabel: {
+    color: '#0a0a0d',
     fontSize: 13,
     fontWeight: '900',
     letterSpacing: 1,

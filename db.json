@@ -103,6 +103,12 @@
       "nome": "Lucas Gabriel",
       "telefone": "(11) 98765-4321",
       "email": "lucas.gabriel@email.com"
+    },
+    {
+      "nome": "aura",
+      "telefone": "(15) 99817-8025",
+      "email": "aura@email.com",
+      "id": "JVmhoXQ"
     }
   ],
   "agendamentos": [
@@ -115,7 +121,7 @@
       "profissionalId": "1",
       "data": "2026-08-19",
       "hora": "09:00",
-      "status": "agendado",
+      "status": "concluido",
       "observacoes": "Corte degradê navalhado."
     },
     {
@@ -127,7 +133,7 @@
       "profissionalId": "2",
       "data": "2026-08-19",
       "hora": "14:00",
-      "status": "agendado",
+      "status": "concluido",
       "observacoes": "Barboterapia com toalha quente."
     },
     {
