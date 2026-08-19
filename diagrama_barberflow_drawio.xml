@@ -1,0 +1,108 @@
+<mxfile host="app.diagrams.net" modified="2026-08-18T21:15:00.000Z" agent="BarberFlow Diagram Generator" version="21.0.0" type="device">
+  <diagram id="barberflow-mer" name="Modelagem Logica BarberFlow PAM">
+    <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#0a0a0d" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Titulo do Diagrama -->
+        <mxCell id="title" value="💈 MODELAGEM LÓGICA DE DADOS - BARBERFLOW (PAM)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;fontColor=#f59e0b;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="300" y="30" width="570" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Subtitulo -->
+        <mxCell id="subtitle" value="Diagrama Entidade-Relacionamento (DER) • Disciplina: Programação de Aplicativos Móveis" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#94a3b8;" vertex="1" parent="1">
+          <mxGeometry x="300" y="65" width="570" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- TABELA SERVICOS -->
+        <mxCell id="table_servicos" value="SERVICOS&#xa;(Catálogo de Serviços)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;whiteSpace=wrap;fillColor=#181824;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f59e0b;fontSize=13;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="160" width="260" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="serv_pk" value="🔑 PK  id : VARCHAR(36)" style="text;strokeColor=none;fillColor=#232332;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#fef3c7;fontStyle=1;fontSize=12;" vertex="1" parent="table_servicos">
+          <mxGeometry y="30" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="serv_f1" value="• nome : VARCHAR(100) [NOT NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#cbd5e1;fontSize=11;" vertex="1" parent="table_servicos">
+          <mxGeometry y="56" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="serv_f2" value="• descricao : TEXT [NOT NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#cbd5e1;fontSize=11;" vertex="1" parent="table_servicos">
+          <mxGeometry y="82" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="serv_f3" value="• preco : DECIMAL(10,2) [NOT NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#cbd5e1;fontSize=11;" vertex="1" parent="table_servicos">
+          <mxGeometry y="108" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="serv_f4" value="• duracaoMinutos : INT [NOT NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#cbd5e1;fontSize=11;" vertex="1" parent="table_servicos">
+          <mxGeometry y="134" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="serv_f5" value="• imagemUrl : VARCHAR(255) [NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#94a3b8;fontSize=11;" vertex="1" parent="table_servicos">
+          <mxGeometry y="160" width="260" height="26" as="geometry" />
+        </mxCell>
+
+        <!-- TABELA AGENDAMENTOS -->
+        <mxCell id="table_agendamentos" value="AGENDAMENTOS&#xa;(Operação Principal CRUD)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;whiteSpace=wrap;fillColor=#181824;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f59e0b;fontSize=13;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="450" y="140" width="290" height="275" as="geometry" />
+        </mxCell>
+        <mxCell id="ag_pk" value="🔑 PK  id : VARCHAR(36)" style="text;strokeColor=none;fillColor=#232332;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#fef3c7;fontStyle=1;fontSize=12;" vertex="1" parent="table_agendamentos">
+          <mxGeometry y="30" width="290" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ag_f1" value="• clienteNome : VARCHAR(100) [NOT NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#cbd5e1;fontSize=11;" vertex="1" parent="table_agendamentos">
+          <mxGeometry y="56" width="290" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ag_f2" value="• clienteTelefone : VARCHAR(20) [NOT NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#cbd5e1;fontSize=11;" vertex="1" parent="table_agendamentos">
+          <mxGeometry y="82" width="290" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ag_fk1" value="🔗 FK  servicoId : VARCHAR(36) [NOT NULL]" style="text;strokeColor=none;fillColor=#232332;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#38bdf8;fontStyle=1;fontSize=11;" vertex="1" parent="table_agendamentos">
+          <mxGeometry y="108" width="290" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ag_fk2" value="🔗 FK  profissionalId : VARCHAR(36) [NOT NULL]" style="text;strokeColor=none;fillColor=#232332;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#38bdf8;fontStyle=1;fontSize=11;" vertex="1" parent="table_agendamentos">
+          <mxGeometry y="134" width="290" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ag_f3" value="• data : DATE / VARCHAR(10) [NOT NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#cbd5e1;fontSize=11;" vertex="1" parent="table_agendamentos">
+          <mxGeometry y="160" width="290" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ag_f4" value="• hora : VARCHAR(5) [NOT NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#cbd5e1;fontSize=11;" vertex="1" parent="table_agendamentos">
+          <mxGeometry y="186" width="290" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ag_f5" value="• status : VARCHAR(20) [agendado|concluido]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#fbbf24;fontSize=11;" vertex="1" parent="table_agendamentos">
+          <mxGeometry y="212" width="290" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="ag_f6" value="• observacoes : TEXT [NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#94a3b8;fontSize=11;" vertex="1" parent="table_agendamentos">
+          <mxGeometry y="238" width="290" height="26" as="geometry" />
+        </mxCell>
+
+        <!-- TABELA PROFISSIONAIS -->
+        <mxCell id="table_profissionais" value="PROFISSIONAIS&#xa;(Barbeiros &amp; Especialistas)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;whiteSpace=wrap;fillColor=#181824;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f59e0b;fontSize=13;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="840" y="160" width="260" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="prof_pk" value="🔑 PK  id : VARCHAR(36)" style="text;strokeColor=none;fillColor=#232332;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#fef3c7;fontStyle=1;fontSize=12;" vertex="1" parent="table_profissionais">
+          <mxGeometry y="30" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="prof_f1" value="• nome : VARCHAR(100) [NOT NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#cbd5e1;fontSize=11;" vertex="1" parent="table_profissionais">
+          <mxGeometry y="56" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="prof_f2" value="• especialidade : VARCHAR(100) [NOT NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#cbd5e1;fontSize=11;" vertex="1" parent="table_profissionais">
+          <mxGeometry y="82" width="260" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="prof_f3" value="• avatarUrl : VARCHAR(255) [NULL]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#94a3b8;fontSize=11;" vertex="1" parent="table_profissionais">
+          <mxGeometry y="108" width="260" height="26" as="geometry" />
+        </mxCell>
+
+        <!-- LIGACAO SERVICOS -> AGENDAMENTOS -->
+        <mxCell id="rel_serv_ag" value="1,1 : 0,N&#xa;(é contratado em)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#f59e0b;strokeWidth=2;fontColor=#fef08a;fontSize=11;labelBackgroundColor=#121218;endArrow=ERmany;startArrow=ERone;" edge="1" parent="1" source="serv_pk" target="ag_fk1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- LIGACAO PROFISSIONAIS -> AGENDAMENTOS -->
+        <mxCell id="rel_prof_ag" value="1,1 : 0,N&#xa;(atende)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#f59e0b;strokeWidth=2;fontColor=#fef08a;fontSize=11;labelBackgroundColor=#121218;endArrow=ERmany;startArrow=ERone;" edge="1" parent="1" source="prof_pk" target="ag_fk2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Rodape informativo -->
+        <mxCell id="footer" value="* PK = Primary Key (Chave Primária) | FK = Foreign Key (Chave Estrangeira) | Cardinalidade: (1,1) Um e Apenas Um ➔ (0,N) Zero ou Vários" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#64748b;" vertex="1" parent="1">
+          <mxGeometry x="250" y="460" width="670" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

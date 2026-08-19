@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Diagrama Entidade-Relacionamento • BarberFlow (PAM)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0d;
+      --card-bg: #121218;
+      --gold: #f59e0b;
+      --gold-light: #fef08a;
+      --border-gold: rgba(212, 175, 55, 0.35);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --blue-fk: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+      color: var(--text);
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .title {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+    .diagram-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      width: 100%;
+    }
+    .entity-card {
+      background: var(--card-bg);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      width: 320px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(245, 158, 11, 0.15);
+      position: relative;
+    }
+    .entity-header {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(18, 18, 24, 0.95) 100%);
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .entity-name {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--gold-light);
+      letter-spacing: 1px;
+    }
+    .entity-tag {
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+    .fields-list {
+      padding: 12px 0;
+    }
+    .field-item {
+      padding: 8px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .field-item:last-child {
+      border-bottom: none;
+    }
+    .field-pk {
+      background: rgba(245, 158, 11, 0.12);
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+    .field-fk {
+      background: rgba(56, 189, 248, 0.1);
+      font-weight: 700;
+      color: var(--blue-fk);
+    }
+    .field-type {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .rel-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 13px;
+      gap: 6px;
+    }
+    .rel-line {
+      width: 60px;
+      height: 3px;
+      background: var(--gold);
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    }
+    .footer-note {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="title">💈 MODELAGEM LÓGICA DE DADOS • BARBERFLOW</div>
+    <div class="subtitle">Diagrama Entidade-Relacionamento (DER) • Disciplina: Programação de Aplicativos Móveis (PAM)</div>
+  </div>
+
+  <div class="diagram-container">
+    <!-- SERVICOS -->
+    <div class="entity-card">
+      <div class="entity-header">
+        <span class="entity-name">SERVICOS</span>
+        <span class="entity-tag">CATÁLOGO</span>
+      </div>
+      <div class="fields-list">
+        <div class="field-item field-pk">
+          <span>🔑 id (PK)</span>
+          <span class="field-type">VARCHAR(36)</span>
+        </div>
+        <div class="field-item">
+          <span>nome</span>
+          <span class="field-type">VARCHAR(100)</span>
+        </div>
+        <div class="field-item">
+          <span>descricao</span>
+          <span class="field-type">TEXT</span>
+        </div>
+        <div class="field-item">
+          <span>preco</span>
+          <span class="field-type">DECIMAL(10,2)</span>
+        </div>
+        <div class="field-item">
+          <span>duracaoMinutos</span>
+          <span class="field-type">INT</span>
+        </div>
+        <div class="field-item">
+          <span>imagemUrl</span>
+          <span class="field-type">VARCHAR(255)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RELACIONAMENTO 1 -->
+    <div class="rel-arrow">
+      <span>(1,1)</span>
+      <div class="rel-line"></div>
+      <span>(0,N)</span>
+      <span style="font-size: 11px; color: var(--text-muted);">contrata</span>
+    </div>
+
+    <!-- AGENDAMENTOS (CENTRAL) -->
+    <div class="entity-card" style="border-width: 3px; box-shadow: 0 15px 40px rgba(245, 158, 11, 0.25);">
+      <div class="entity-header" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.4) 0%, rgba(18, 18, 24, 0.95) 100%);">
+        <span class="entity-name">AGENDAMENTOS</span>
+        <span class="entity-tag" style="background: var(--gold); color: #000; font-weight: 800;">PRINCIPAL CRUD</span>
+      </div>
+      <div class="fields-list">
+        <div class="field-item field-pk">
+          <span>🔑 id (PK)</span>
+          <span class="field-type">VARCHAR(36)</span>
+        </div>
+        <div class="field-item">
+          <span>clienteNome</span>
+          <span class="field-type">VARCHAR(100)</span>
+        </div>
+        <div class="field-item">
+          <span>clienteTelefone</span>
+          <span class="field-type">VARCHAR(20)</span>
+        </div>
+        <div class="field-item field-fk">
+          <span>🔗 servicoId (FK)</span>
+          <span class="field-type">VARCHAR(36)</span>
+        </div>
+        <div class="field-item field-fk">
+          <span>🔗 profissionalId (FK)</span>
+          <span class="field-type">VARCHAR(36)</span>
+        </div>
+        <div class="field-item">
+          <span>data</span>
+          <span class="field-type">DATE</span>
+        </div>
+        <div class="field-item">
+          <span>hora</span>
+          <span class="field-type">VARCHAR(5)</span>
+        </div>
+        <div class="field-item">
+          <span>status</span>
+          <span class="field-type">VARCHAR(20)</span>
+        </div>
+        <div class="field-item">
+          <span>observacoes</span>
+          <span class="field-type">TEXT</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RELACIONAMENTO 2 -->
+    <div class="rel-arrow">
+      <span>(0,N)</span>
+      <div class="rel-line"></div>
+      <span>(1,1)</span>
+      <span style="font-size: 11px; color: var(--text-muted);">atende</span>
+    </div>
+
+    <!-- PROFISSIONAIS -->
+    <div class="entity-card">
+      <div class="entity-header">
+        <span class="entity-name">PROFISSIONAIS</span>
+        <span class="entity-tag">EQUIPE</span>
+      </div>
+      <div class="fields-list">
+        <div class="field-item field-pk">
+          <span>🔑 id (PK)</span>
+          <span class="field-type">VARCHAR(36)</span>
+        </div>
+        <div class="field-item">
+          <span>nome</span>
+          <span class="field-type">VARCHAR(100)</span>
+        </div>
+        <div class="field-item">
+          <span>especialidade</span>
+          <span class="field-type">VARCHAR(100)</span>
+        </div>
+        <div class="field-item">
+          <span>avatarUrl</span>
+          <span class="field-type">VARCHAR(255)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <strong>Legenda:</strong> 🔑 PK (Primary Key - Chave Primária) &nbsp;|&nbsp; 🔗 FK (Foreign Key - Chave Estrangeira) &nbsp;|&nbsp; Cardinalidade: 1 Serviço pode estar em 0 a Vários Agendamentos (1,1 : 0,N)
+  </div>
+</body>
+</html>
