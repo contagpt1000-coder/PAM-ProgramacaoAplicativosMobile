@@ -37,6 +37,7 @@ server.get('/', (req, res) => {
       --red-bg: rgba(239, 68, 68, 0.15);
       --blue: #38bdf8;
       --blue-bg: rgba(56, 189, 248, 0.15);
+      --purple: #a855f7;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -172,8 +173,8 @@ server.get('/', (req, res) => {
     }
 
     .content-grid {
-      display: grid;
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
       gap: 24px;
     }
 
@@ -214,6 +215,12 @@ server.get('/', (req, res) => {
       padding: 5px 10px;
       border-radius: 8px;
       border: 1px solid var(--border-gold);
+      transition: all 0.2s ease;
+    }
+
+    .endpoint-tag:hover {
+      background: var(--gold-primary);
+      color: #0a0a0d;
     }
 
     .table-container {
@@ -302,7 +309,7 @@ server.get('/', (req, res) => {
       <div class="brand-icon">✂</div>
       <div>
         <div class="logo-text">BARBERFLOW REST API</div>
-        <div class="subtitle">Modelo Relacional em 3ª Forma Normal • 5 Coleções Ativas</div>
+        <div class="subtitle">Modelo Relacional em 3ª Forma Normal • 5 Tabelas e Coleções Ativas</div>
       </div>
     </div>
     <div class="status-badge">
@@ -311,34 +318,36 @@ server.get('/', (req, res) => {
     </div>
   </div>
 
+  <!-- 5 STAT CARDS NO TOPO -->
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-label">Agendamentos</div>
+      <div class="stat-label">1. Agendamentos</div>
       <div class="stat-value" id="stat-agendamentos">-</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Clientes Cadastrados</div>
+      <div class="stat-label">2. Clientes (3FN)</div>
       <div class="stat-value" id="stat-clientes">-</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Serviços Oferecidos</div>
+      <div class="stat-label">3. Serviços</div>
       <div class="stat-value" id="stat-servicos">-</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Categorias</div>
-      <div class="stat-value" id="stat-categorias">-</div>
+      <div class="stat-label">4. Profissionais</div>
+      <div class="stat-value" id="stat-profissionais">-</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Profissionais</div>
-      <div class="stat-value" id="stat-profissionais">-</div>
+      <div class="stat-label">5. Categorias</div>
+      <div class="stat-value" id="stat-categorias">-</div>
     </div>
   </div>
 
+  <!-- 5 TABLE CARDS COMPLETOS -->
   <div class="content-grid">
-    <!-- AGENDAMENTOS -->
+    <!-- CARD 1: AGENDAMENTOS -->
     <div class="card">
       <div class="card-header">
-        <div class="card-title">📅 Agendamentos (Tabela Central CRUD)</div>
+        <div class="card-title">📅 1. Tabela Agendamentos (Tabela Central CRUD)</div>
         <a href="/agendamentos" target="_blank" class="endpoint-tag">GET /agendamentos ↗</a>
       </div>
       <div class="table-container">
@@ -361,11 +370,12 @@ server.get('/', (req, res) => {
       </div>
     </div>
 
+    <!-- LINHA COM CARD 2 E CARD 3 -->
     <div class="two-cols">
-      <!-- CLIENTES -->
+      <!-- CARD 2: CLIENTES -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">👤 Clientes (Normalizado 3FN)</div>
+          <div class="card-title">👤 2. Tabela Clientes (Base Cadastral)</div>
           <a href="/clientes" target="_blank" class="endpoint-tag">GET /clientes ↗</a>
         </div>
         <div class="table-container">
@@ -385,10 +395,10 @@ server.get('/', (req, res) => {
         </div>
       </div>
 
-      <!-- SERVIÇOS E CATEGORIAS -->
+      <!-- CARD 3: SERVIÇOS -->
       <div class="card">
         <div class="card-header">
-          <div class="card-title">💈 Catálogo de Serviços</div>
+          <div class="card-title">💈 3. Tabela Serviços (Catálogo)</div>
           <a href="/servicos" target="_blank" class="endpoint-tag">GET /servicos ↗</a>
         </div>
         <div class="table-container">
@@ -396,13 +406,60 @@ server.get('/', (req, res) => {
             <thead>
               <tr>
                 <th>Serviço</th>
-                <th>Categoria</th>
+                <th>Categoria (FK)</th>
                 <th>Preço</th>
                 <th>Duração</th>
               </tr>
             </thead>
             <tbody id="tbl-servicos">
               <tr><td colspan="4" style="text-align:center; color: var(--text-muted);">Carregando serviços...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINHA COM CARD 4 E CARD 5 -->
+    <div class="two-cols">
+      <!-- CARD 4: PROFISSIONAIS -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">✂️ 4. Tabela Profissionais (Barbeiros)</div>
+          <a href="/profissionais" target="_blank" class="endpoint-tag">GET /profissionais ↗</a>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Especialidade</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-profissionais">
+              <tr><td colspan="3" style="text-align:center; color: var(--text-muted);">Carregando profissionais...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CARD 5: CATEGORIAS -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🏷️ 5. Tabela Categorias (Classificação)</div>
+          <a href="/categorias" target="_blank" class="endpoint-tag">GET /categorias ↗</a>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome da Categoria</th>
+                <th>Ícone</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-categorias">
+              <tr><td colspan="3" style="text-align:center; color: var(--text-muted);">Carregando categorias...</td></tr>
             </tbody>
           </table>
         </div>
@@ -437,10 +494,10 @@ server.get('/', (req, res) => {
         document.getElementById('stat-agendamentos').innerText = agendamentos.length;
         document.getElementById('stat-clientes').innerText = clientes.length;
         document.getElementById('stat-servicos').innerText = servicos.length;
-        document.getElementById('stat-categorias').innerText = categorias.length;
         document.getElementById('stat-profissionais').innerText = profissionais.length;
+        document.getElementById('stat-categorias').innerText = categorias.length;
 
-        // Render Agendamentos
+        // 1. Render Agendamentos
         const tblAg = document.getElementById('tbl-agendamentos');
         tblAg.innerHTML = agendamentos.map(a => {
           const cliente = clMap[a.clienteId] ? clMap[a.clienteId].nome : a.clienteNome || 'Cliente #' + a.clienteId;
@@ -463,7 +520,7 @@ server.get('/', (req, res) => {
           \`;
         }).join('');
 
-        // Render Clientes
+        // 2. Render Clientes
         const tblCl = document.getElementById('tbl-clientes');
         tblCl.innerHTML = clientes.map(c => \`
           <tr>
@@ -474,7 +531,7 @@ server.get('/', (req, res) => {
           </tr>
         \`).join('');
 
-        // Render Servicos
+        // 3. Render Servicos
         const tblSe = document.getElementById('tbl-servicos');
         tblSe.innerHTML = servicos.map(s => {
           const cat = catMap[s.categoriaId] ? catMap[s.categoriaId].nome : 'Geral';
@@ -488,8 +545,28 @@ server.get('/', (req, res) => {
           \`;
         }).join('');
 
+        // 4. Render Profissionais
+        const tblPr = document.getElementById('tbl-profissionais');
+        tblPr.innerHTML = profissionais.map(p => \`
+          <tr>
+            <td style="font-weight:700; color: var(--gold-primary)">#\${p.id}</td>
+            <td><strong>\${p.nome}</strong></td>
+            <td style="color: var(--text-muted)">\${p.especialidade}</td>
+          </tr>
+        \`).join('');
+
+        // 5. Render Categorias
+        const tblCat = document.getElementById('tbl-categorias');
+        tblCat.innerHTML = categorias.map(c => \`
+          <tr>
+            <td style="font-weight:700; color: var(--purple)">#\${c.id}</td>
+            <td><strong>\${c.nome}</strong></td>
+            <td><code>\${c.icone || '-'}</code></td>
+          </tr>
+        \`).join('');
+
       } catch (err) {
-        console.error('Erro:', err);
+        console.error('Erro ao carregar dados:', err);
       }
     }
 
