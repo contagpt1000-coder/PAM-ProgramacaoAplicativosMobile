@@ -14,7 +14,7 @@ server.get('/', (req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BarberFlow API • Dark Gold Dashboard</title>
+  <title>BarberFlow API • Dark Gold Dashboard (5 Tabelas)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -31,13 +31,12 @@ server.get('/', (req, res) => {
       --gold-gradient-text: linear-gradient(135deg, #fffbeb 0%, #f59e0b 50%, #d97706 100%);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --text-dim: #64748b;
       --green: #10b981;
       --green-bg: rgba(16, 185, 129, 0.15);
       --red: #ef4444;
       --red-bg: rgba(239, 68, 68, 0.15);
-      --blue: #3b82f6;
-      --blue-bg: rgba(59, 130, 246, 0.15);
+      --blue: #38bdf8;
+      --blue-bg: rgba(56, 189, 248, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -45,14 +44,13 @@ server.get('/', (req, res) => {
     body {
       background-color: var(--bg-dark);
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 60%),
-        radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.04) 0%, transparent 40%);
+        radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.12) 0%, transparent 65%),
+        radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.08) 0%, transparent 45%);
       color: var(--text-main);
       padding: 28px 36px;
       min-height: 100vh;
     }
 
-    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
@@ -125,11 +123,10 @@ server.get('/', (req, res) => {
       100% { transform: scale(0.95); opacity: 0.8; }
     }
 
-    /* Stat Cards Grid */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
       margin-bottom: 32px;
     }
 
@@ -137,16 +134,16 @@ server.get('/', (req, res) => {
       background: var(--bg-card);
       border: 1px solid var(--border-gold);
       border-radius: 16px;
-      padding: 20px;
+      padding: 18px;
       position: relative;
       overflow: hidden;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
     }
 
     .stat-card:hover {
       border-color: var(--border-gold-bright);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
     }
 
     .stat-card::before {
@@ -160,32 +157,31 @@ server.get('/', (req, res) => {
     }
 
     .stat-label {
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
     .stat-value {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 800;
       color: var(--text-main);
-      margin-top: 8px;
+      margin-top: 6px;
     }
 
-    /* Main Sections Layout */
     .content-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 28px;
+      gap: 24px;
     }
 
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border-gold);
       border-radius: 16px;
-      padding: 24px;
+      padding: 22px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
@@ -193,14 +189,14 @@ server.get('/', (req, res) => {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       padding-bottom: 12px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .card-title {
       font-family: 'Cinzel', serif;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
       color: var(--gold-primary);
       display: flex;
@@ -210,23 +206,16 @@ server.get('/', (req, res) => {
 
     .endpoint-tag {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
       color: var(--gold-primary);
       text-decoration: none;
       background: rgba(245, 158, 11, 0.1);
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 8px;
       border: 1px solid var(--border-gold);
-      transition: all 0.2s ease;
     }
 
-    .endpoint-tag:hover {
-      background: rgba(245, 158, 11, 0.25);
-      border-color: var(--gold-primary);
-    }
-
-    /* Tables */
     .table-container {
       overflow-x: auto;
     }
@@ -243,15 +232,15 @@ server.get('/', (req, res) => {
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 1.2px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       background: rgba(0, 0, 0, 0.2);
     }
 
     td {
-      padding: 14px 16px;
+      padding: 12px 14px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-main);
       vertical-align: middle;
     }
@@ -260,39 +249,24 @@ server.get('/', (req, res) => {
       background: var(--bg-card-hover);
     }
 
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .avatar {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--border-gold);
-    }
-
     .badge-status {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 16px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
-    .status-agendado, .status-pendente {
+    .status-agendado {
       color: var(--gold-primary);
       background: rgba(245, 158, 11, 0.15);
       border: 1px solid rgba(245, 158, 11, 0.3);
     }
 
-    .status-concluido, .status-finalizado {
+    .status-concluido {
       color: var(--green);
       background: var(--green-bg);
       border: 1px solid rgba(16, 185, 129, 0.3);
@@ -307,18 +281,13 @@ server.get('/', (req, res) => {
     .price-tag {
       color: var(--gold-primary);
       font-weight: 700;
-      font-size: 15px;
-    }
-
-    .duration-tag {
-      color: var(--text-muted);
-      font-size: 13px;
+      font-size: 14px;
     }
 
     .two-cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 28px;
+      gap: 24px;
     }
 
     @media (max-width: 900px) {
@@ -332,32 +301,36 @@ server.get('/', (req, res) => {
     <div class="brand">
       <div class="brand-icon">✂</div>
       <div>
-        <div class="logo-text">BARBERFLOW PREMIUM</div>
-        <div class="subtitle">Servidor REST High-Performance • Interceptador Root HTTP /</div>
+        <div class="logo-text">BARBERFLOW REST API</div>
+        <div class="subtitle">Modelo Relacional em 3ª Forma Normal • 5 Coleções Ativas</div>
       </div>
     </div>
     <div class="status-badge">
       <div class="status-dot"></div>
-      <span>JSON-SERVER ONLINE (:3000)</span>
+      <span>JSON-SERVER ATIVO (:3000)</span>
     </div>
   </div>
 
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-label">Agendamentos Totais</div>
+      <div class="stat-label">Agendamentos</div>
       <div class="stat-value" id="stat-agendamentos">-</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Serviços Ativos</div>
+      <div class="stat-label">Clientes Cadastrados</div>
+      <div class="stat-value" id="stat-clientes">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Serviços Oferecidos</div>
       <div class="stat-value" id="stat-servicos">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Categorias</div>
+      <div class="stat-value" id="stat-categorias">-</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Profissionais</div>
       <div class="stat-value" id="stat-profissionais">-</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Ticket Médio</div>
-      <div class="stat-value" id="stat-ticket">R$ 0,00</div>
     </div>
   </div>
 
@@ -365,7 +338,7 @@ server.get('/', (req, res) => {
     <!-- AGENDAMENTOS -->
     <div class="card">
       <div class="card-header">
-        <div class="card-title">📅 Agendamentos Recentes</div>
+        <div class="card-title">📅 Agendamentos (Tabela Central CRUD)</div>
         <a href="/agendamentos" target="_blank" class="endpoint-tag">GET /agendamentos ↗</a>
       </div>
       <div class="table-container">
@@ -373,9 +346,9 @@ server.get('/', (req, res) => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Cliente</th>
-              <th>Serviço</th>
-              <th>Profissional</th>
+              <th>Cliente (FK)</th>
+              <th>Serviço (FK)</th>
+              <th>Profissional (FK)</th>
               <th>Data & Hora</th>
               <th>Status</th>
               <th>Observações</th>
@@ -389,7 +362,30 @@ server.get('/', (req, res) => {
     </div>
 
     <div class="two-cols">
-      <!-- SERVIÇOS -->
+      <!-- CLIENTES -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">👤 Clientes (Normalizado 3FN)</div>
+          <a href="/clientes" target="_blank" class="endpoint-tag">GET /clientes ↗</a>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-clientes">
+              <tr><td colspan="4" style="text-align:center; color: var(--text-muted);">Carregando clientes...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SERVIÇOS E CATEGORIAS -->
       <div class="card">
         <div class="card-header">
           <div class="card-title">💈 Catálogo de Serviços</div>
@@ -400,33 +396,13 @@ server.get('/', (req, res) => {
             <thead>
               <tr>
                 <th>Serviço</th>
+                <th>Categoria</th>
                 <th>Preço</th>
                 <th>Duração</th>
               </tr>
             </thead>
             <tbody id="tbl-servicos">
-              <tr><td colspan="3" style="text-align:center; color: var(--text-muted);">Carregando serviços...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- PROFISSIONAIS -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">✂ Profissionais</div>
-          <a href="/profissionais" target="_blank" class="endpoint-tag">GET /profissionais ↗</a>
-        </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Profissional</th>
-                <th>Especialidade</th>
-              </tr>
-            </thead>
-            <tbody id="tbl-profissionais">
-              <tr><td colspan="2" style="text-align:center; color: var(--text-muted);">Carregando profissionais...</td></tr>
+              <tr><td colspan="4" style="text-align:center; color: var(--text-muted);">Carregando serviços...</td></tr>
             </tbody>
           </table>
         </div>
@@ -437,93 +413,83 @@ server.get('/', (req, res) => {
   <script>
     async function loadData() {
       try {
-        const [agRes, serRes, profRes] = await Promise.all([
+        const [agRes, serRes, profRes, clRes, catRes] = await Promise.all([
           fetch('/agendamentos'),
           fetch('/servicos'),
-          fetch('/profissionais')
+          fetch('/profissionais'),
+          fetch('/clientes'),
+          fetch('/categorias')
         ]);
 
         const agendamentos = await agRes.json();
         const servicos = await serRes.json();
         const profissionais = await profRes.json();
+        const clientes = await clRes.json();
+        const categorias = await catRes.json();
 
-        // Maps for quick lookup
-        const serMap = {};
-        servicos.forEach(s => serMap[s.id] = s);
-        const profMap = {};
-        profissionais.forEach(p => profMap[p.id] = p);
+        // Maps
+        const serMap = {}; servicos.forEach(s => serMap[s.id] = s);
+        const profMap = {}; profissionais.forEach(p => profMap[p.id] = p);
+        const clMap = {}; clientes.forEach(c => clMap[c.id] = c);
+        const catMap = {}; categorias.forEach(c => catMap[c.id] = c);
 
-        // Render Stats
+        // Stats
         document.getElementById('stat-agendamentos').innerText = agendamentos.length;
+        document.getElementById('stat-clientes').innerText = clientes.length;
         document.getElementById('stat-servicos').innerText = servicos.length;
+        document.getElementById('stat-categorias').innerText = categorias.length;
         document.getElementById('stat-profissionais').innerText = profissionais.length;
 
-        if (servicos.length > 0) {
-          const totalPreco = servicos.reduce((acc, curr) => acc + (curr.preco || 0), 0);
-          const media = totalPreco / servicos.length;
-          document.getElementById('stat-ticket').innerText = 'R$ ' + media.toFixed(2).replace('.', ',');
-        }
-
         // Render Agendamentos
-        const tblAgendamentos = document.getElementById('tbl-agendamentos');
-        if (agendamentos.length === 0) {
-          tblAgendamentos.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted)">Nenhum agendamento encontrado</td></tr>';
-        } else {
-          tblAgendamentos.innerHTML = agendamentos.map(a => {
-            const servico = serMap[a.servicoId] ? serMap[a.servicoId].nome : 'Serviço #' + a.servicoId;
-            const prof = profMap[a.profissionalId] ? profMap[a.profissionalId].nome : 'Profissional #' + a.profissionalId;
-            const st = (a.status || 'agendado').toLowerCase();
-            const statusClass = st === 'concluido' ? 'status-concluido' : (st === 'cancelado' ? 'status-cancelado' : 'status-agendado');
+        const tblAg = document.getElementById('tbl-agendamentos');
+        tblAg.innerHTML = agendamentos.map(a => {
+          const cliente = clMap[a.clienteId] ? clMap[a.clienteId].nome : a.clienteNome || 'Cliente #' + a.clienteId;
+          const tel = clMap[a.clienteId] ? clMap[a.clienteId].telefone : a.clienteTelefone || '';
+          const servico = serMap[a.servicoId] ? serMap[a.servicoId].nome : 'Serviço #' + a.servicoId;
+          const prof = profMap[a.profissionalId] ? profMap[a.profissionalId].nome : 'Profissional #' + a.profissionalId;
+          const st = (a.status || 'agendado').toLowerCase();
+          const statusClass = st === 'concluido' ? 'status-concluido' : (st === 'cancelado' ? 'status-cancelado' : 'status-agendado');
 
-            return \`
-              <tr>
-                <td style="font-weight:700; color: var(--gold-primary)">#\${a.id}</td>
-                <td>
-                  <div style="font-weight: 600;">\${a.clienteNome}</div>
-                  <div style="font-size: 12px; color: var(--text-muted)">\${a.clienteTelefone || ''}</div>
-                </td>
-                <td>\${servico}</td>
-                <td>\${prof}</td>
-                <td>\${a.data}<br><small style="color:var(--text-muted)">\${a.hora}</small></td>
-                <td><span class="badge-status \${statusClass}">\${st}</span></td>
-                <td style="font-size: 12px; color: var(--text-muted)">\${a.observacoes || '-'}</td>
-              </tr>
-            \`;
-          }).join('');
-        }
+          return \`
+            <tr>
+              <td style="font-weight:700; color: var(--gold-primary)">#\${a.id}</td>
+              <td><strong>\${cliente}</strong><br><small style="color:var(--text-muted)">\${tel}</small></td>
+              <td>\${servico}</td>
+              <td>\${prof}</td>
+              <td>\${a.data}<br><small style="color:var(--text-muted)">\${a.hora}</small></td>
+              <td><span class="badge-status \${statusClass}">\${st}</span></td>
+              <td style="font-size: 12px; color: var(--text-muted)">\${a.observacoes || '-'}</td>
+            </tr>
+          \`;
+        }).join('');
+
+        // Render Clientes
+        const tblCl = document.getElementById('tbl-clientes');
+        tblCl.innerHTML = clientes.map(c => \`
+          <tr>
+            <td style="font-weight:700; color: var(--blue)">#\${c.id}</td>
+            <td><strong>\${c.nome}</strong></td>
+            <td>\${c.telefone}</td>
+            <td style="font-size:12px; color: var(--text-muted)">\${c.email || '-'}</td>
+          </tr>
+        \`).join('');
 
         // Render Servicos
-        const tblServicos = document.getElementById('tbl-servicos');
-        tblServicos.innerHTML = servicos.map(s => \`
-          <tr>
-            <td>
-              <div style="font-weight: 700;">\${s.nome}</div>
-              <div style="font-size: 12px; color: var(--text-muted)">\${s.descricao || ''}</div>
-            </td>
-            <td><span class="price-tag">R$ \${(s.preco || 0).toFixed(2).replace('.', ',')}</span></td>
-            <td><span class="duration-tag">⏱ \${s.duracaoMinutos} min</span></td>
-          </tr>
-        \`).join('');
-
-        // Render Profissionais
-        const tblProfissionais = document.getElementById('tbl-profissionais');
-        tblProfissionais.innerHTML = profissionais.map(p => \`
-          <tr>
-            <td>
-              <div class="user-info">
-                <img src="\${p.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'}" class="avatar" alt="\${p.nome}" />
-                <div>
-                  <div style="font-weight: 700;">\${p.nome}</div>
-                  <div style="font-size: 11px; color: var(--gold-primary)">ID: \${p.id}</div>
-                </div>
-              </div>
-            </td>
-            <td><span style="font-size: 13px; color: var(--text-main)">\${p.especialidade}</span></td>
-          </tr>
-        \`).join('');
+        const tblSe = document.getElementById('tbl-servicos');
+        tblSe.innerHTML = servicos.map(s => {
+          const cat = catMap[s.categoriaId] ? catMap[s.categoriaId].nome : 'Geral';
+          return \`
+            <tr>
+              <td><strong>\${s.nome}</strong></td>
+              <td><span style="font-size:11px; padding:2px 8px; border-radius:10px; background:rgba(245,158,11,0.1); color:var(--gold-primary)">\${cat}</span></td>
+              <td><span class="price-tag">R$ \${(s.preco || 0).toFixed(2).replace('.', ',')}</span></td>
+              <td>\${s.duracaoMinutos} min</td>
+            </tr>
+          \`;
+        }).join('');
 
       } catch (err) {
-        console.error('Erro ao carregar dados do servidor:', err);
+        console.error('Erro:', err);
       }
     }
 

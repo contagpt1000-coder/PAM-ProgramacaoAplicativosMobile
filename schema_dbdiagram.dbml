@@ -1,38 +1,54 @@
 // =========================================================
-// 💈 BARBERFLOW - MODELAGEM DE BANCO DE DADOS (PAM)
+// 💈 BARBERFLOW - MODELO DE DADOS COMPLETO (5 TABELAS / 3FN)
 // Ferramenta: dbdiagram.io (DBML - Database Markup Language)
+// Disciplina: Programação de Aplicativos Móveis (PAM)
 // =========================================================
+
+Table categorias {
+  id varchar [pk, not null, note: 'Identificador único da categoria']
+  nome varchar(50) [not null, note: 'Ex: Cortes & Cabelo, Barba & Terapia, etc']
+  icone varchar(50) [null, note: 'Ícone temático representativo']
+}
 
 Table servicos {
   id varchar [pk, not null, note: 'Identificador único do serviço']
+  categoriaId varchar [not null, note: 'Chave estrangeira referenciando categorias.id']
   nome varchar(100) [not null, note: 'Ex: Corte de Cabelo Premium']
-  descricao text [not null, note: 'Procedimentos inclusos']
-  preco decimal(10,2) [not null, note: 'Valor em Reais (BRL)']
-  duracaoMinutos int [not null, note: 'Tempo estimado de atendimento']
-  imagemUrl varchar(255) [null, note: 'Link da foto ilustrativa']
+  descricao text [not null, note: 'Detalhamento dos procedimentos']
+  preco decimal(10,2) [not null, note: 'Preço em Reais (BRL)']
+  duracaoMinutos int [not null, note: 'Duração estimada em minutos']
+  imagemUrl varchar(255) [null, note: 'Foto ilustrativa']
 }
 
 Table profissionais {
-  id varchar [pk, not null, note: 'Identificador único do barbeiro']
-  nome varchar(100) [not null, note: 'Nome completo do profissional']
-  especialidade varchar(100) [not null, note: 'Área de atuação (Fade, Barba, etc)']
-  avatarUrl varchar(255) [null, note: 'Foto de perfil do barbeiro']
+  id varchar [pk, not null, note: 'Identificador único do profissional']
+  nome varchar(100) [not null, note: 'Nome completo do barbeiro']
+  especialidade varchar(100) [not null, note: 'Especialidade técnica']
+  avatarUrl varchar(255) [null, note: 'Foto de perfil']
+}
+
+Table clientes {
+  id varchar [pk, not null, note: 'Identificador único do cliente (3FN)']
+  nome varchar(100) [not null, note: 'Nome completo do cliente']
+  telefone varchar(20) [not null, note: 'Telefone de contato com DDD']
+  email varchar(100) [null, note: 'E-mail do cliente']
 }
 
 Table agendamentos {
   id varchar [pk, not null, note: 'Identificador único do agendamento']
-  clienteNome varchar(100) [not null, note: 'Nome completo do cliente']
-  clienteTelefone varchar(20) [not null, note: 'Telefone com DDD formatado']
+  clienteId varchar [not null, note: 'Chave estrangeira referenciando clientes.id']
   servicoId varchar [not null, note: 'Chave estrangeira referenciando servicos.id']
   profissionalId varchar [not null, note: 'Chave estrangeira referenciando profissionais.id']
   data date [not null, note: 'Data no formato AAAA-MM-DD']
   hora varchar(5) [not null, note: 'Horário no formato HH:mm (08:00 às 18:00)']
   status varchar(20) [not null, default: 'agendado', note: 'agendado | concluido | cancelado']
-  observacoes text [null, note: 'Notas ou preferências adicionais']
+  observacoes text [null, note: 'Notas ou preferências do cliente']
 }
 
 // ---------------------------------------------------------
-// RELACIONAMENTOS E INTEGRIDADE REFERENCIAL (1 para N)
+// RELACIONAMENTOS E CHAVES ESTRANGEIRAS (1 para N)
 // ---------------------------------------------------------
+Ref: categorias.id < servicos.categoriaId
 Ref: servicos.id < agendamentos.servicoId
 Ref: profissionais.id < agendamentos.profissionalId
+Ref: clientes.id < agendamentos.clienteId
