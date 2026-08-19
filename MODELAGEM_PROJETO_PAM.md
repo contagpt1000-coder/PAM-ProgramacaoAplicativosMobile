@@ -1,126 +1,95 @@
-# Projeto PAM - 1ª Parte: Modelagem de Banco de Dados
-
-## Identificação
-- Integrantes: [Nome 1] e [Nome 2]
-- Tema: Sistema de Agendamento (Barbearia / BarberFlow)
-- Tecnologias: React Native, Expo, Axios e json-server
-
-## Descrição do Projeto
-Aplicação mobile para gerenciamento de agendamentos em uma barbearia. O sistema permite listar serviços, escolher profissionais, cadastrar novos agendamentos e gerenciar o status dos atendimentos (agendado, concluído ou cancelado). Os dados são consumidos via API REST simulada com json-server.
+# 💈 DOCUMENTAÇÃO DE MODELAGEM E PROJETO - PAM
+## Disciplina: Programação de Aplicativos Móveis (PAM)
+### 1ª Parte do Projeto: Escolha do Tema & Modelagem Normalizada (5 Tabelas - 3FN)
 
 ---
 
-## 1. Modelagem Lógica (Diagrama Entidade-Relacionamento)
+## 👥 1. Identificação da Dupla & Tema Escolhido
 
-### Entidades e Relacionamentos:
-- **categorias (1,1) ---- (0,N) servicos**: Uma categoria agrupa vários serviços.
-- **servicos (1,1) ---- (0,N) agendamentos**: Cada agendamento possui um serviço contratado.
-- **profissionais (1,1) ---- (0,N) agendamentos**: Cada agendamento é atendido por um profissional.
-- **clientes (1,1) ---- (0,N) agendamentos**: Um cliente pode ter vários agendamentos.
+- **Integrantes da Dupla:** [Nome do Integrante 1] e [Nome do Integrante 2]
+- **Tema do Projeto:** Sistema de Agendamento (Nicho: Barbearia & Estética Masculina / *BarberFlow*)
+- **Plataforma:** Mobile (React Native + Expo) com consumo de API REST (`json-server`)
+
+### 📝 Justificativa e Escopo da Aplicação:
+> O aplicativo **BarberFlow** implementa operações completas de **CRUD** (Create, Read, Update, Delete) consumindo endpoints REST via protocolo HTTP com Axios. O banco de dados foi projetado em conformidade com a **3ª Forma Normal (3FN)**, estruturado em **5 entidades interligadas**: Categorias, Serviços, Profissionais, Clientes e Agendamentos. O sistema conta com validações rigorosas no front-end, contingência offline automática e design escuro premium (*Dark Gold*) com acessibilidade total.
+
+---
+
+## 📊 2. Modelagem Lógica (DER - Diagrama Entidade-Relacionamento)
 
 ```mermaid
 erDiagram
-    CATEGORIAS ||--o{ SERVICOS : "possui"
-    SERVICOS ||--o{ AGENDAMENTOS : "esta em"
-    PROFISSIONAIS ||--o{ AGENDAMENTOS : "atende"
-    CLIENTES ||--o{ AGENDAMENTOS : "agenda"
+    CATEGORIAS ||--o{ SERVICOS : "classifica"
+    SERVICOS ||--o{ AGENDAMENTOS : "é contratado em"
+    PROFISSIONAIS ||--o{ AGENDAMENTOS : "realiza o atendimento de"
+    CLIENTES ||--o{ AGENDAMENTOS : "solicita"
 
     CATEGORIAS {
-        string id PK
-        string nome
-        string icone
+        string id PK "Identificador único da categoria"
+        string nome "Nome da categoria (Cabelo, Barba, Combos, etc)"
+        string icone "Ícone ilustrativo"
     }
 
     SERVICOS {
-        string id PK
-        string categoriaId FK
-        string nome
-        string descricao
-        number preco
-        number duracaoMinutos
-        string imagemUrl
+        string id PK "Identificador único do serviço"
+        string categoriaId FK "Chave estrangeira -> categorias.id"
+        string nome "Nome do serviço"
+        string descricao "Procedimentos inclusos"
+        number preco "Valor em Reais (BRL)"
+        number duracaoMinutos "Tempo estimado em minutos"
+        string imagemUrl "URL ilustrativa (opcional)"
     }
 
     PROFISSIONAIS {
-        string id PK
-        string nome
-        string especialidade
-        string avatarUrl
+        string id PK "Identificador único do profissional"
+        string nome "Nome do barbeiro/especialista"
+        string especialidade "Área de atuação"
+        string avatarUrl "Foto de perfil (opcional)"
     }
 
     CLIENTES {
-        string id PK
-        string nome
-        string telefone
-        string email
+        string id PK "Identificador único do cliente"
+        string nome "Nome completo do cliente"
+        string telefone "Telefone com DDD"
+        string email "E-mail de contato"
     }
 
     AGENDAMENTOS {
-        string id PK
-        string clienteId FK
-        string servicoId FK
-        string profissionalId FK
-        string data
-        string hora
-        string status
-        string observacoes
+        string id PK "Identificador único do agendamento"
+        string clienteId FK "Chave estrangeira -> clientes.id"
+        string servicoId FK "Chave estrangeira -> servicos.id"
+        string profissionalId FK "Chave estrangeira -> profissionais.id"
+        string data "Data no formato AAAA-MM-DD"
+        string hora "Horário no formato HH:mm"
+        string status "agendado | concluido | cancelado"
+        string observacoes "Notas adicionais"
     }
 ```
 
 ---
 
-## 2. Modelagem Física
+## 🗄️ 3. Modelagem Física
 
-### Dicionário de Dados
+### 3.1 Dicionário de Dados
 
-1. **categorias**
-   - `id`: VARCHAR(36) - Chave Primária (PK)
-   - `nome`: VARCHAR(50) - Nome da categoria
-   - `icone`: VARCHAR(50) - Ícone representativo
-
-2. **servicos**
-   - `id`: VARCHAR(36) - Chave Primária (PK)
-   - `categoriaId`: VARCHAR(36) - Chave Estrangeira (FK categorias)
-   - `nome`: VARCHAR(100) - Nome do serviço
-   - `descricao`: TEXT - Detalhes do serviço
-   - `preco`: DECIMAL(10,2) - Valor do serviço
-   - `duracaoMinutos`: INT - Duração estimada em minutos
-   - `imagemUrl`: VARCHAR(255) - Link da imagem
-
-3. **profissionais**
-   - `id`: VARCHAR(36) - Chave Primária (PK)
-   - `nome`: VARCHAR(100) - Nome do profissional
-   - `especialidade`: VARCHAR(100) - Especialidade
-   - `avatarUrl`: VARCHAR(255) - Foto de perfil
-
-4. **clientes**
-   - `id`: VARCHAR(36) - Chave Primária (PK)
-   - `nome`: VARCHAR(100) - Nome do cliente
-   - `telefone`: VARCHAR(20) - Telefone com DDD
-   - `email`: VARCHAR(100) - E-mail do cliente
-
-5. **agendamentos**
-   - `id`: VARCHAR(36) - Chave Primária (PK)
-   - `clienteId`: VARCHAR(36) - Chave Estrangeira (FK clientes)
-   - `servicoId`: VARCHAR(36) - Chave Estrangeira (FK servicos)
-   - `profissionalId`: VARCHAR(36) - Chave Estrangeira (FK profissionais)
-   - `data`: DATE - Data do atendimento (AAAA-MM-DD)
-   - `hora`: VARCHAR(5) - Horário do atendimento (HH:mm)
-   - `status`: VARCHAR(20) - Situação: agendado, concluido ou cancelado
-   - `observacoes`: TEXT - Observações gerais
+1. **`categorias`**: `id` (PK, VARCHAR), `nome` (VARCHAR(50), NOT NULL), `icone` (VARCHAR(50)).
+2. **`servicos`**: `id` (PK, VARCHAR), `categoriaId` (FK, VARCHAR, NOT NULL), `nome` (VARCHAR(100), NOT NULL), `descricao` (TEXT, NOT NULL), `preco` (DECIMAL(10,2), NOT NULL), `duracaoMinutos` (INT, NOT NULL), `imagemUrl` (VARCHAR(255)).
+3. **`profissionais`**: `id` (PK, VARCHAR), `nome` (VARCHAR(100), NOT NULL), `especialidade` (VARCHAR(100), NOT NULL), `avatarUrl` (VARCHAR(255)).
+4. **`clientes`**: `id` (PK, VARCHAR), `nome` (VARCHAR(100), NOT NULL), `telefone` (VARCHAR(20), NOT NULL), `email` (VARCHAR(100)).
+5. **`agendamentos`**: `id` (PK, VARCHAR), `clienteId` (FK, VARCHAR, NOT NULL), `servicoId` (FK, VARCHAR, NOT NULL), `profissionalId` (FK, VARCHAR, NOT NULL), `data` (DATE, NOT NULL), `hora` (VARCHAR(5), NOT NULL), `status` (VARCHAR(20), NOT NULL), `observacoes` (TEXT).
 
 ---
 
-## 3. Endpoints da API REST
+## 🌐 4. Especificação de Rotas da API REST
 
-| Método | Rota | Descrição |
-| :--- | :--- | :--- |
-| `GET` | `/agendamentos` | Lista todos os agendamentos |
-| `GET` | `/agendamentos/:id` | Busca agendamento por ID |
-| `POST` | `/agendamentos` | Cadastra novo agendamento |
-| `PATCH` | `/agendamentos/:id` | Atualiza dados/status do agendamento |
-| `DELETE` | `/agendamentos/:id` | Remove agendamento |
-| `GET` | `/servicos` | Lista os serviços |
-| `GET` | `/profissionais` | Lista os profissionais |
-| `GET` | `/clientes` | Lista os clientes |
-| `GET` | `/categorias` | Lista as categorias |
+| Operação | Método | Rota | Descrição |
+| :--- | :--- | :--- | :--- |
+| **Listar Agendamentos** | `GET` | `/agendamentos` | Lista agendamentos (suporta filtros `?status=` e `?data=`) |
+| **Consultar Agendamento** | `GET` | `/agendamentos/:id` | Detalhes de um agendamento específico |
+| **Cadastrar Agendamento** | `POST` | `/agendamentos` | Cria agendamento com `clienteId`, `servicoId` e `profissionalId` |
+| **Atualizar Status** | `PATCH` | `/agendamentos/:id` | Altera status (`concluido`/`cancelado`) |
+| **Remover Agendamento** | `DELETE`| `/agendamentos/:id` | Remove agendamento do histórico |
+| **Clientes** | `GET` / `POST` | `/clientes` | Gerenciamento de clientes cadastrados |
+| **Catálogo de Serviços** | `GET` | `/servicos` | Lista serviços com vínculo de categoria |
+| **Categorias** | `GET` | `/categorias` | Lista as categorias de serviços |
+| **Profissionais** | `GET` | `/profissionais` | Lista a equipe de barbeiros |

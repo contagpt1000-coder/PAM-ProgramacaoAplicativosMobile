@@ -1,43 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Modal, Portal, Button, Chip, TextInput } from 'react-native-paper';
 import { COLORS } from '../constants/colors';
 
-interface FilterModalProps {
+export interface FilterModalProps {
   visible: boolean;
-  currentStatus: string;
-  currentDate: string;
-  onDismiss: () => void;
-  onApplyFilters: (status: string, date: string) => void;
+  onClose?: () => void;
+  onDismiss?: () => void;
+  selectedStatus?: string;
+  currentStatus?: string;
+  selectedDate?: string;
+  currentDate?: string;
+  onSelectStatus?: (status: string) => void;
+  onSelectDate?: (date: string) => void;
+  onApplyFilters?: (status: string, date: string) => void;
 }
 
 export const FilterModal: React.FC<FilterModalProps> = ({
   visible,
-  currentStatus,
-  currentDate,
+  onClose,
   onDismiss,
+  selectedStatus: propSelectedStatus,
+  currentStatus = 'todos',
+  selectedDate: propSelectedDate,
+  currentDate = '',
+  onSelectStatus,
+  onSelectDate,
   onApplyFilters,
 }) => {
-  const [selectedStatus, setSelectedStatus] = useState<string>(currentStatus);
-  const [selectedDate, setSelectedDate] = useState<string>(currentDate);
+  const initialStatus = propSelectedStatus ?? currentStatus;
+  const initialDate = propSelectedDate ?? currentDate;
+
+  const [localStatus, setLocalStatus] = useState<string>(initialStatus);
+  const [localDate, setLocalDate] = useState<string>(initialDate);
+
+  useEffect(() => {
+    setLocalStatus(initialStatus);
+    setLocalDate(initialDate);
+  }, [initialStatus, initialDate]);
+
+  const handleClose = () => {
+    if (onClose) onClose();
+    if (onDismiss) onDismiss();
+  };
 
   const handleApply = () => {
-    onApplyFilters(selectedStatus, selectedDate);
-    onDismiss();
+    if (onSelectStatus) onSelectStatus(localStatus);
+    if (onSelectDate) onSelectDate(localDate);
+    if (onApplyFilters) onApplyFilters(localStatus, localDate);
+    handleClose();
   };
 
   const handleReset = () => {
-    setSelectedStatus('todos');
-    setSelectedDate('');
-    onApplyFilters('todos', '');
-    onDismiss();
+    setLocalStatus('todos');
+    setLocalDate('');
+    if (onSelectStatus) onSelectStatus('todos');
+    if (onSelectDate) onSelectDate('');
+    if (onApplyFilters) onApplyFilters('todos', '');
+    handleClose();
   };
 
   return (
     <Portal>
       <Modal
         visible={visible}
-        onDismiss={onDismiss}
+        onDismiss={handleClose}
         contentContainerStyle={styles.container}
       >
         <Text style={styles.title} accessibilityRole="header">FILTRAR AGENDAMENTOS</Text>
@@ -45,23 +72,21 @@ export const FilterModal: React.FC<FilterModalProps> = ({
         <Text style={styles.sectionLabel}>STATUS</Text>
         <View style={styles.chipRow}>
           {['todos', 'agendado', 'concluido', 'cancelado'].map((status) => {
-            const isSelected = selectedStatus === status;
+            const isSelected = localStatus === status;
             return (
               <Chip
                 key={status}
                 selected={isSelected}
-                onPress={() => setSelectedStatus(status)}
+                onPress={() => setLocalStatus(status)}
                 style={[
                   styles.chip,
                   isSelected && { backgroundColor: COLORS.primary },
                 ]}
                 textStyle={{
-                  color: isSelected ? COLORS.background : COLORS.textPrimary,
-                  fontWeight: '700',
+                  color: isSelected ? '#000' : COLORS.textPrimary,
                   fontSize: 12,
+                  fontWeight: '700',
                 }}
-                accessibilityRole="button"
-                accessibilityLabel={`Filtro status ${status}`}
               >
                 {status.toUpperCase()}
               </Chip>
@@ -69,38 +94,36 @@ export const FilterModal: React.FC<FilterModalProps> = ({
           })}
         </View>
 
-        <Text style={styles.sectionLabel}>FILTRAR POR DATA (AAAA-MM-DD)</Text>
+        <Text style={styles.sectionLabel}>DATA (AAAA-MM-DD)</Text>
         <TextInput
           mode="outlined"
-          placeholder="Ex: 2026-08-10"
-          placeholderTextColor={COLORS.textSecondary}
-          value={selectedDate}
-          onChangeText={setSelectedDate}
-          keyboardType="numeric"
-          maxLength={10}
-          textColor={COLORS.textPrimary}
+          placeholder="Ex: 2026-08-19"
+          value={localDate}
+          onChangeText={setLocalDate}
+          style={styles.dateInput}
           outlineColor={COLORS.cardBorder}
           activeOutlineColor={COLORS.primary}
-          style={styles.input}
-          accessibilityLabel="Campo de filtro por data em formato ano mês dia"
+          textColor={COLORS.textPrimary}
+          placeholderTextColor={COLORS.textSecondary}
+          accessibilityLabel="Campo para filtrar por data no formato ano, mês e dia"
         />
 
         <View style={styles.buttonRow}>
           <Button
             mode="outlined"
             onPress={handleReset}
+            style={styles.resetButton}
             textColor={COLORS.textSecondary}
-            style={styles.button}
-            accessibilityLabel="Limpar todos os filtros"
+            accessibilityLabel="Limpar todos os filtros aplicados"
           >
             LIMPAR
           </Button>
           <Button
             mode="contained"
             onPress={handleApply}
+            style={styles.applyButton}
             buttonColor={COLORS.primary}
-            textColor={COLORS.background}
-            style={styles.button}
+            textColor="#000"
             accessibilityLabel="Aplicar filtros selecionados"
           >
             APLICAR
@@ -114,49 +137,54 @@ export const FilterModal: React.FC<FilterModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.cardBackground,
-    padding: 20,
     margin: 20,
+    padding: 24,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: COLORS.cardBorder,
+    borderColor: COLORS.primary,
+    maxWidth: 500,
+    alignSelf: 'center',
+    width: '90%',
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '800',
     color: COLORS.primary,
-    letterSpacing: 1.5,
-    marginBottom: 16,
+    marginBottom: 20,
     textAlign: 'center',
+    letterSpacing: 1,
   },
   sectionLabel: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.textSecondary,
-    marginBottom: 8,
-    marginTop: 8,
+    marginBottom: 10,
+    letterSpacing: 1,
   },
   chipRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginBottom: 12,
+    marginBottom: 20,
   },
   chip: {
     backgroundColor: COLORS.cardBorder,
+    borderWidth: 1,
+    borderColor: COLORS.cardBorder,
   },
-  input: {
-    backgroundColor: COLORS.background,
-    marginBottom: 16,
+  dateInput: {
+    backgroundColor: COLORS.cardBackground,
+    marginBottom: 24,
   },
   buttonRow: {
     flexDirection: 'row',
+    justifyContent: 'flex-end',
     gap: 12,
-    marginTop: 8,
   },
-  button: {
-    flex: 1,
-    minHeight: 44,
-    justifyContent: 'center',
-    borderRadius: 8,
+  resetButton: {
+    borderColor: COLORS.cardBorder,
+  },
+  applyButton: {
+    fontWeight: '700',
   },
 });
